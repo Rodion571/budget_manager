@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Список доходов</title>
+</head>
+<body>
+    <h1>Список доходов</h1>
+    <a href="{% url 'add_income' %}">Добавить доход</a>
+    <ul>
+        {% for income in incomes %}
+            <li>{{ income.name }} - {{ income.amount }} ({{ income.date }})</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
