@@ -56,7 +56,7 @@ ROOT_URLCONF = 'budget_manager.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'budget_manager/templates'],  # Проверь, чтобы путь был именно сюда
+        'DIRS': [os.path.join(BASE_DIR, 'budget_manager/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -68,6 +68,8 @@ TEMPLATES = [
         },
     },
 ]
+
+
 
 WSGI_APPLICATION = 'budget_manager.wsgi.application'
 

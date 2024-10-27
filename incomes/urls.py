@@ -1,8 +1,7 @@
-# incomes/urls.py
 from django.urls import path
-from .views import income_list, add_income
+from .views import add_income, income_list
 
 urlpatterns = [
-    path('', income_list, name='income_list'),
     path('add/', add_income, name='add_income'),
+    path('list/', income_list, name='income_list'),
 ]

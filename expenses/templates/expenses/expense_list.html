@@ -1,15 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="uk">
 <head>
-    <title>Список расходов</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Список Витрат</title>
 </head>
 <body>
-    <h1>Список расходов</h1>
-    <a href="{% url 'add_expense' %}">Добавить новый расход</a>
-    <ul>
-        {% for expense in expenses %}
-            <li>{{ expense.category }} - {{ expense.amount }} ({{ expense.date }})</li>
-        {% endfor %}
-    </ul>
+    <div class="container mt-5">
+        <h1 class="text-center">Список Витрат</h1>
+        <ul class="list-group">
+            {% for expense in expenses %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ expense.category }}</strong> - {{ expense.amount }} ({{ expense.date }})
+                    </div>
+                    <button class="btn btn-danger btn-sm">Удалити</button>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
