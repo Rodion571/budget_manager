@@ -1,5 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from expenses.models import Expense
+
 from incomes.models import Income
 from expenses.forms import ExpenseForm
 from incomes.forms import IncomeForm
@@ -12,7 +14,7 @@ def home(request):
     incomes = Income.objects.all()
     return render(request, 'home.html', {'expenses': expenses, 'incomes': incomes})
 
-
+@login_required
 def add_expense(request):
     if request.method == "POST":
         form = ExpenseForm(request.POST)
@@ -23,6 +25,7 @@ def add_expense(request):
         form = ExpenseForm()
     return render(request, 'expenses/add_expense.html', {'form': form})
 
+@login_required
 def add_income(request):
     if request.method == "POST":
         form = IncomeForm(request.POST)
@@ -33,10 +36,24 @@ def add_income(request):
         form = IncomeForm()
     return render(request, 'incomes/add_income.html', {'form': form})
 
+@login_required
+def delete_expense(request, expense_id):
+    expense = get_object_or_404(Expense, id=expense_id)
+    expense.delete()
+    return redirect('home')
+
+@login_required
+def delete_income(request, income_id):
+    income = get_object_or_404(Income, id=income_id)
+    income.delete()
+    return redirect('home')
+
+@login_required
 def expense_list(request):
     expenses = Expense.objects.all()
     return render(request, 'expenses/expense_list.html', {'expenses': expenses})
 
+@login_required
 def expense_chart(request):
     expenses = Expense.objects.all()
     categories = [expense.category for expense in expenses]
@@ -55,8 +72,5 @@ def expense_chart(request):
     buffer.close()
     graphic = base64.b64encode(image_png)
     graphic = graphic.decode('utf-8')
-
-    from django.shortcuts import get_object_or_404
-
 
     return render(request, 'expenses/expense_chart.html', {'graphic': graphic})

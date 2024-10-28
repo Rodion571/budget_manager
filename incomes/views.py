@@ -1,14 +1,14 @@
-# incomes/views.py
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from incomes.models import Income
 from .forms import IncomeForm
+from django.contrib.auth.decorators import login_required
 
-# Отображение списка доходов
+@login_required
 def income_list(request):
     incomes = Income.objects.all()
     return render(request, 'incomes/income_list.html', {'incomes': incomes})
 
-# Добавление нового дохода
+@login_required
 def add_income(request):
     if request.method == 'POST':
         form = IncomeForm(request.POST)

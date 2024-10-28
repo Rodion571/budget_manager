@@ -13,6 +13,13 @@
         <div class="text-center mb-4">
             <img src="{% static 'images/new_image.jpg' %}" class="img-fluid" alt="Бюджетний Менеджер">
         </div>
+        <div class="text-right mb-4">
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="btn btn-danger">Вийти</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-primary">Увійти</a>
+            {% endif %}
+        </div>
         <div class="row">
             <div class="col-md-8">
                 <h2>Список Витрат</h2>
@@ -22,13 +29,17 @@
                             <div>
                                 <strong>{{ expense.category }}</strong> - {{ expense.amount }} ({{ expense.date }})
                             </div>
-                            <button class="btn btn-danger btn-sm">Удалити</button>
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'delete_expense' expense.id %}" class="btn btn-danger btn-sm">Удалити</a>
+                            {% endif %}
                         </li>
                     {% endfor %}
                 </ul>
-                <div class="text-center mt-4">
-                    <a href="{% url 'add_expense' %}" class="btn btn-primary">Додати Витрату</a>
-                </div>
+                {% if user.is_authenticated %}
+                    <div class="text-center mt-4">
+                        <a href="{% url 'add_expense' %}" class="btn btn-primary">Додати Витрату</a>
+                    </div>
+                {% endif %}
             </div>
             <div class="col-md-8">
                 <h2>Список Доходів</h2>
@@ -38,13 +49,17 @@
                             <div>
                                 <strong>{{ income.source }}</strong> - {{ income.amount }} ({{ income.date }})
                             </div>
-                            <button class="btn btn-success btn-sm">Удалити</button>
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'delete_income' income.id %}" class="btn btn-success btn-sm">Удалити</a>
+                            {% endif %}
                         </li>
                     {% endfor %}
                 </ul>
-                <div class="text-center mt-4">
-                    <a href="{% url 'add_income' %}" class="btn btn-success">Додати Доход</a>
-                </div>
+                {% if user.is_authenticated %}
+                    <div class="text-center mt-4">
+                        <a href="{% url 'add_income' %}" class="btn btn-success">Додати Доход</a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
