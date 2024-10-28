@@ -8,12 +8,8 @@ import matplotlib.pyplot as plt
 import io
 import base64
 
-
 def home(request):
-    expenses = Expense.objects.all()
-    incomes = Income.objects.all()
-    return render(request, 'home.html', {'expenses': expenses, 'incomes': incomes})
-
+    return render(request, 'home.html')
 
 @login_required
 def income_list(request):
@@ -21,9 +17,31 @@ def income_list(request):
     return render(request, 'income_list.html', {'incomes': incomes})
 
 @login_required
+def add_income(request):
+    if request.method == "POST":
+        form = IncomeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('income_list')
+    else:
+        form = IncomeForm()
+    return render(request, 'add_income.html', {'form': form})
+
+@login_required
 def expense_list(request):
     expenses = Expense.objects.all()
     return render(request, 'expense_list.html', {'expenses': expenses})
+
+@login_required
+def add_expense(request):
+    if request.method == "POST":
+        form = ExpenseForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('expense_list')
+    else:
+        form = ExpenseForm()
+    return render(request, 'add_expense.html', {'form': form})
 
 @login_required
 def expense_chart(request):
@@ -42,8 +60,7 @@ def expense_chart(request):
     buffer.seek(0)
     image_png = buffer.getvalue()
     buffer.close()
-    graphic = base64.b64encode(image_png)
-    graphic = graphic.decode('utf-8')
+    graphic = base64.b64encode(image_png).decode('utf-8')
 
     return render(request, 'expense_chart.html', {'graphic': graphic})
 
@@ -54,4 +71,3 @@ def budget_planning(request):
 @login_required
 def financial_tips(request):
     return render(request, 'financial_tips.html')
-

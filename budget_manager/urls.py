@@ -17,11 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from . import views
-from budget_manager.views import budget_planning, financial_tips, income_list, expense_list, expense_chart
+from budget_manager.views import home, budget_planning, financial_tips, income_list, expense_list, expense_chart, add_income, add_expense
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),
+    path('', home, name='home'),
     path('accounts/', include('accounts.urls')),
     path('expenses/', include('expenses.urls')),
     path('incomes/', include('incomes.urls')),
@@ -30,6 +30,9 @@ urlpatterns = [
     path('income-list/', income_list, name='income_list'),
     path('expense-list/', expense_list, name='expense_list'),
     path('expense-chart/', expense_chart, name='expense_chart'),
+    path('add-income/', add_income, name='add_income'),
+    path('add-expense/', add_expense, name='add_expense'),
 ]
+
 
 
