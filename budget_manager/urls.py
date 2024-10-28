@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from . import views
+from budget_manager.views import budget_planning, financial_tips, income_list, expense_list, expense_chart
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +25,11 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('expenses/', include('expenses.urls')),
     path('incomes/', include('incomes.urls')),
+    path('budget-planning/', budget_planning, name='budget_planning'),
+    path('financial-tips/', financial_tips, name='financial_tips'),
+    path('income-list/', income_list, name='income_list'),
+    path('expense-list/', expense_list, name='expense_list'),
+    path('expense-chart/', expense_chart, name='expense_chart'),
 ]
+
+

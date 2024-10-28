@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcnd.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Навігація</title>
+    <style>
+        .nav-link {
+            display: block;
+            background-color: white;
+            border: 2px solid green;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            color: black;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            background-color: #d4f5d4;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav flex-column">
+        <a class="nav-link" href="#" data-url="{% url 'home' %}">Головна</a>
+        <a class="nav-link" href="#" data-url="{% url 'income_list' %}">Доходи</a>
+        <a class="nav-link" href="#" data-url="{% url 'expense_list' %}">Витрати</a>
+        <a class="nav-link" href="#" data-url="{% url 'expense_chart' %}">Графіки</a>
+        <a class="nav-link" href="#" data-url="{% url 'budget_planning' %}">Планування бюджету</a>
+        <a class="nav-link" href="#" data-url="{% url 'financial_tips' %}">Фінансові поради</a>
+    </nav>
+</body>
+</html>

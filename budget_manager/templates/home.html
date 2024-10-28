@@ -4,67 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <title>Головна Сторінка</title>
+    <title>Домашня бухгалтерія: облік розходу та доходу, планування бюджета</title>
     {% load static %}
+    <style>
+        body {
+            background-color: #f7f3e9;
+            margin: 0;
+            padding: 0;
+        }
+        .container-fluid {
+            padding: 0;
+        }
+        .left-column {
+            background-color: #d2b48c;
+            background-image: url("{% static 'images/pattern.png' %}");
+            background-size: cover;
+            height: 100vh;
+            padding: 20px;
+        }
+        .center-column {
+            background-color: #dcdde1;
+            padding: 20px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .top-right-corner {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center">Головна Сторінка</h1>
-        <div class="text-center mb-4">
-            <img src="{% static 'images/new_image.jpg' %}" class="img-fluid" alt="Бюджетний Менеджер">
-        </div>
-        <div class="text-right mb-4">
-            {% if user.is_authenticated %}
-                <a href="{% url 'logout' %}" class="btn btn-danger">Вийти</a>
-            {% else %}
-                <a href="{% url 'login' %}" class="btn btn-primary">Увійти</a>
-            {% endif %}
-        </div>
+    <div class="top-right-corner">
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}" class="btn btn-danger">Вийти</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn btn-primary">Увійти</a>
+        {% endif %}
+    </div>
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-8">
-                <h2>Список Витрат</h2>
-                <ul class="list-group">
-                    {% for expense in expenses %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <strong>{{ expense.category }}</strong> - {{ expense.amount }} ({{ expense.date }})
-                            </div>
-                            {% if user.is_authenticated %}
-                                <a href="{% url 'delete_expense' expense.id %}" class="btn btn-danger btn-sm">Удалити</a>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
-                {% if user.is_authenticated %}
-                    <div class="text-center mt-4">
-                        <a href="{% url 'add_expense' %}" class="btn btn-primary">Додати Витрату</a>
-                    </div>
-                {% endif %}
+            <div class="col-md-3 left-column">
+                {% include 'left_column.html' %}
             </div>
-            <div class="col-md-8">
-                <h2>Список Доходів</h2>
-                <ul class="list-group">
-                    {% for income in incomes %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <strong>{{ income.source }}</strong> - {{ income.amount }} ({{ income.date }})
-                            </div>
-                            {% if user.is_authenticated %}
-                                <a href="{% url 'delete_income' income.id %}" class="btn btn-success btn-sm">Удалити</a>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
-                {% if user.is_authenticated %}
-                    <div class="text-center mt-4">
-                        <a href="{% url 'add_income' %}" class="btn btn-success">Додати Доход</a>
-                    </div>
-                {% endif %}
+            <div class="col-md-9 center-column">
+                <h1 class="text-center">Домашня бухгалтерія: облік розходу та доходу, планування бюджета</h1>
+                <div class="text-center mb-4">
+                    <img src="{% static 'images/new_image.jpg' %}" class="img-fluid" alt="Бюджетний Менеджер">
+                </div>
+                <div class="row">
+                    {% block content %}{% endblock %}
+                </div>
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcnd.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.nav-link').on('click', function(e) {
+                e.preventDefault();
+                var url = $(this).data('url');
+                $.ajax({
+                    url: url,
+                    success: function(data) {
+                        $('.center-column .row').html($(data).find('.center-column .row').html());
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
