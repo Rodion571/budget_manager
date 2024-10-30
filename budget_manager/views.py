@@ -4,6 +4,7 @@ from expenses.models import Expense
 from incomes.models import Income
 from expenses.forms import ExpenseForm
 from incomes.forms import IncomeForm
+import datetime
 import matplotlib.pyplot as plt
 import io
 import base64
@@ -13,8 +14,25 @@ def home(request):
 
 @login_required
 def income_list(request):
+    if request.method == 'POST' and 'source' in request.POST:
+        name = request.POST['name']
+        source = request.POST['source']
+        amount = request.POST['amount']
+        Income.objects.create(name=name, source=source, amount=amount)
+        return redirect('income_list')
+    elif request.method == 'POST' and 'delete_income' in request.POST:
+        income_id = request.POST['delete_income']
+        Income.objects.filter(id=income_id).delete()
+        return redirect('income_list')
     incomes = Income.objects.all()
     return render(request, 'income_list.html', {'incomes': incomes})
+
+@login_required
+def delete_income(request, id):
+    income = get_object_or_404(Income, id=id)
+    income.delete()
+    return redirect('income_list')
+
 
 @login_required
 def add_income(request):

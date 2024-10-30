@@ -1,26 +1,33 @@
-{% load static %}
 {% block content %}
-    <div class="col-md-12">
-        <h2>Список Доходів</h2>
-        <form method="post" action="{% url 'add_income' %}">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="source">Джерело</label>
-                <input type="text" class="form-control" id="source" name="source" required>
-            </div>
-            <div class="form-group">
-                <label for="amount">Сума</label>
-                <input type="number" class="form-control" id="amount" name="amount" required>
-            </div>
-            <button type="submit" class="btn btn-success">Додати Доход</button>
-        </form>
-        <h3 class="mt-4">Існуючі Доходи</h3>
-        <ul class="list-group mt-2">
-            {% for income in incomes %}
-                <li class="list-group-item">
-                    <strong>{{ income.source }}</strong>: {{ income.amount }}
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+<div class="col-md-12" style="background-color: #f1f3f6; padding: 20px; border-radius: 10px;">
+    <h2 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Список Доходів</h2>
+    <form method="post" action="{% url 'income_list' %}" style="margin-bottom: 20px; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name" style="color: #2c3e50; font-size: 18px;">Имя</label>
+            <input type="text" class="form-control" id="name" name="name" required style="border: 2px solid #d2b48c; font-size: 18px; padding: 10px;">
+        </div>
+        <div class="form-group">
+            <label for="source" style="color: #2c3e50; font-size: 18px;">Джерело</label>
+            <input type="text" class="form-control" id="source" name="source" required style="border: 2px solid #d2b48c; font-size: 18px; padding: 10px;">
+        </div>
+        <div class="form-group">
+            <label for="amount" style="color: #2c3e50; font-size: 18px;">Сума</label>
+            <input type="number" class="form-control" id="amount" name="amount" required style="border: 2px solid #d2b48c; font-size: 18px; padding: 10px;">
+        </div>
+        <button type="submit" class="btn btn-success" style="font-size: 18px; padding: 10px 20px;">Додати Доход</button>
+    </form>
+    <h3 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Існуючі Доходи</h3>
+    <ul class="list-group mt-2">
+        {% for income in incomes %}
+            <li class="list-group-item" style="background-color: #ecf0f1; border: none; margin-bottom: 10px; border-radius: 5px;">
+                <strong>{{ income.name }}</strong>: {{ income.source }} - {{ income.amount }}
+                <form method="post" action="{% url 'delete_income' income.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px;">Удалить</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}

@@ -60,14 +60,17 @@
             <div class="col-md-3 left-column">
                 {% include 'left_column.html' %}
             </div>
-            <div class="col-md-9 center-column">
-                <div class="row" id="content">
-                    {% block content %}{% endblock %}
+            <div class="col-md-9">
+                <div id="content">
+                    {% block content %}
+                    {% include 'home_content.html' %}
+                    {% endblock %}
                 </div>
             </div>
         </div>
     </div>
-         <div class="footer">
+
+    <div class="footer">
         <div class="row">
             <div class="col-md-3">
                 <img src="{% static 'images/kiev.jpg' %}" alt="Киев" style="width: 125px; height: 125px; margin-bottom: 5px;">
@@ -97,25 +100,37 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('.nav-link').on('click', function(e) {
-                e.preventDefault();
-                $('.nav-link').removeClass('active');
-                $(this).addClass('active');
-                var url = $(this).data('url');
-                console.log("Clicked URL: " + url);
-                $.ajax({
-                    url: url,
-                    success: function(data) {
-                        console.log("Data received:", data);
-                        $('#content').html($(data).find('#content').html());
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("AJAX Error:", status, error);
-                    }
-                });
+        document.addEventListener("DOMContentLoaded", function() {
+        // Автозагрузка контента для главной страницы при загрузке
+            fetch("{% url 'home' %}")
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    document.querySelector('#content').innerHTML = doc.querySelector('#content').innerHTML;
+                    document.querySelector('a[href="{% url 'home' %}"]').classList.add('active'); // Выделение ГОЛОВНА
+                })
+                .catch(err => console.error('Failed to fetch page: ', err));
+
+            const links = document.querySelectorAll('.nav-link');
+            links.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    links.forEach(link => link.classList.remove('active'));
+                    link.classList.add('active');
+                    history.pushState(null, '', link.getAttribute('href'));
+                    fetch(link.href)
+                        .then(response => response.text())
+                        .then(html => {
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(html, 'text/html');
+                            document.querySelector('#content').innerHTML = doc.querySelector('#content').innerHTML;
+                        })
+                        .catch(err => console.error('Failed to fetch page: ', err));
             });
         });
-    </script>
+    });
+</script>
+
 </body>
 </html>
