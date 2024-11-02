@@ -28,12 +28,12 @@ from home import views  # Импортируем представления из
 
 from django.contrib import admin
 from django.urls import path, include
-from home import views  # Импортируем представления из приложения `home`
+from home import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home_content, name='home_content'),  # Убедимся, что корневой путь рендерит home_content
-    path('home/', views.home, name='home'),  # Дополнительный маршрут для home
+    path('', views.home_content, name='home_content'),
+    path('home/', views.home, name='home'),
     path('income-list/', views.income_list, name='income_list'),
     path('expense-list/', views.expense_list, name='expense_list'),
     path('expense-chart/', views.expense_chart, name='expense_chart'),
@@ -41,6 +41,7 @@ urlpatterns = [
     path('financial-tips/', views.financial_tips, name='financial_tips'),
     path('add-expense/', views.add_expense, name='add_expense'),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('profile/', views.profile, name='profile'),  # Новый маршрут для профиля
-    path('delete-income/<int:id>/', views.delete_income, name='delete_income')
+    path('profile/', views.profile, name='profile'),
+    path('delete-income/<int:id>/', views.delete_income, name='delete_income'),
+    path('delete-expense/<int:id>/', views.delete_expense, name='delete_expense')
 ]

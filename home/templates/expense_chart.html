@@ -1,9 +1,32 @@
 {% extends "home.html" %}
 {% block content %}
-    <div class="col-md-12">
-        <h2>Графіки</h2>
-        <div class="text-center mt-4">
-            <img src="data:image/png;base64,{{ graphic }}" alt="Графік Витрат" class="img-fluid">
-        </div>
-    </div>
+<div class="col-md-12" style="background-color: #f1f3f6; padding: 20px; border-radius: 10px;">
+    <h2 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Графік витрат</h2>
+    <canvas id="expenseChart" style="background-color: #ffffff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);"></canvas>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const ctx = document.getElementById('expenseChart').getContext('2d');
+        const expenseChart = new Chart(ctx, {
+            type: 'bar', // или 'line', 'pie' и т.д.
+            data: {
+                labels: [{% for expense in expenses %}"{{ expense.category }}",{% endfor %}], // Метки категорий
+                datasets: [{
+                    label: 'Сума витрат',
+                    data: [{% for expense in expenses %}{{ expense.amount }},{% endfor %}], // Данные по суммам
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}

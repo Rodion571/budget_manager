@@ -5,7 +5,7 @@
     <form method="post" action="{% url 'income_list' %}" style="margin-bottom: 20px; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
         {% csrf_token %}
         <div class="form-group">
-            <label for="name" style="color: #2c3e50; font-size: 18px;">Имя</label>
+            <label for="name" style="color: #2c3e50; font-size: 18px;">Ім'я</label>
             <input type="text" class="form-control" id="name" name="name" required style="border: 2px solid #d2b48c; font-size: 18px; padding: 10px;">
         </div>
         <div class="form-group">
@@ -16,19 +16,39 @@
             <label for="amount" style="color: #2c3e50; font-size: 18px;">Сума</label>
             <input type="number" class="form-control" id="amount" name="amount" required style="border: 2px solid #d2b48c; font-size: 18px; padding: 10px;">
         </div>
+        <div class="form-group">
+            <label for="date" style="color: #2c3e50; font-size: 18px;">Дата</label>
+            <input type="date" class="form-control" id="date" name="date" required style="border: 2px solid #d2b48c; font-size: 18px; padding: 10px;">
+        </div>
         <button type="submit" class="btn btn-success" style="font-size: 18px; padding: 10px 20px;">Додати Доход</button>
     </form>
     <h3 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Існуючі Доходи</h3>
-    <ul class="list-group mt-2">
-        {% for income in incomes %}
-            <li class="list-group-item" style="background-color: #ecf0f1; border: none; margin-bottom: 10px; border-radius: 5px;">
-                <strong>{{ income.name }}</strong>: {{ income.source }} - {{ income.amount }}
-                <form method="post" action="{% url 'delete_income' income.id %}" style="display: inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px;">Удалить</button>
-                </form>
-            </li>
-        {% endfor %}
-    </ul>
+    <table class="table table-striped" style="background-color: #ffffff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <thead>
+            <tr>
+                <th scope="col">Ім'я</th>
+                <th scope="col">Джерело</th>
+                <th scope="col">Сума</th>
+                <th scope="col">Дата</th>
+                <th scope="col">Дія</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for income in incomes %}
+                <tr>
+                    <td>{{ income.name }}</td>
+                    <td>{{ income.source }}</td>
+                    <td>{{ income.amount }}</td>
+                    <td>{{ income.date }}</td>
+                    <td>
+                        <form method="post" action="{% url 'delete_income' income.id %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

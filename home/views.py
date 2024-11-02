@@ -13,6 +13,11 @@ def home(request):
     return render(request, 'home.html')
 def home_content(request):
     return render(request, 'home_content.html')
+@login_required
+def delete_expense(request, id):
+    expense = get_object_or_404(Expense, id=id)
+    expense.delete()
+    return redirect('expense_list')
 def profile(request):
     return render(request, 'profile.html')
 @login_required
@@ -21,14 +26,12 @@ def income_list(request):
         name = request.POST['name']
         source = request.POST['source']
         amount = request.POST['amount']
-        Income.objects.create(name=name, source=source, amount=amount)
-        return redirect('income_list')
-    elif request.method == 'POST' and 'delete_income' in request.POST:
-        income_id = request.POST['delete_income']
-        Income.objects.filter(id=income_id).delete()
+        date = request.POST['date']
+        Income.objects.create(name=name, source=source, amount=amount, date=date)
         return redirect('income_list')
     incomes = Income.objects.all()
     return render(request, 'income_list.html', {'incomes': incomes})
+
 
 @login_required
 def delete_income(request, id):
@@ -49,20 +52,29 @@ def add_income(request):
     return render(request, 'add_income.html', {'form': form})
 
 @login_required
+def add_expense(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        category = request.POST['category']
+        amount = request.POST['amount']
+        date = request.POST['date']
+        Expense.objects.create(name=name, category=category, amount=amount, date=date)
+        return redirect('expense_list')
+    return render(request, 'expense_list.html')
+
+@login_required
 def expense_list(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        category = request.POST['category']
+        amount = request.POST['amount']
+        date = request.POST['date']
+        Expense.objects.create(name=name, category=category, amount=amount, date=date)
+        return redirect('expense_list')
     expenses = Expense.objects.all()
     return render(request, 'expense_list.html', {'expenses': expenses})
 
-@login_required
-def add_expense(request):
-    if request.method == "POST":
-        form = ExpenseForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('expense_list')
-    else:
-        form = ExpenseForm()
-    return render(request, 'add_expense.html', {'form': form})
+
 
 @login_required
 def expense_chart(request):
