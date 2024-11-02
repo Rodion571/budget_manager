@@ -27,12 +27,24 @@
 </head>
 <body>
     <nav class="nav flex-column">
-        <a class="nav-link" href="{% url 'home' %}">Головна</a>
-        <a class="nav-link" href="{% url 'income_list' %}">Доходи</a>
-        <a class="nav-link" href="{% url 'expense_list' %}">Витрати</a>
-        <a class="nav-link" href="{% url 'expense_chart' %}">Графіки</a>
-        <a class="nav-link" href="{% url 'budget_planning' %}">Планування бюджету</a>
-        <a class="nav-link" href="{% url 'financial_tips' %}">Фінансові поради</a>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'home' %}">Головна</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'income_list' %}">Доходи</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'expense_list' %}">Расходы</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'expense_chart' %}">График Расходов</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'budget_planning' %}">Планирование Бюджета</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'financial_tips' %}">Финансовые Советы</a>
+        </li>
     </nav>
 </body>
 </html>

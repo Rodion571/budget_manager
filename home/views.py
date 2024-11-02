@@ -11,7 +11,10 @@ import base64
 
 def home(request):
     return render(request, 'home.html')
-
+def home_content(request):
+    return render(request, 'home_content.html')
+def profile(request):
+    return render(request, 'profile.html')
 @login_required
 def income_list(request):
     if request.method == 'POST' and 'source' in request.POST:
