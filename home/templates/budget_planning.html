@@ -1,14 +1,63 @@
 {% extends "home.html" %}
 {% block content %}
-    <div class="col-md-12">
-        <h2>Планування Бюджету</h2>
-        <p>Тут ви можете планувати свій бюджет. Додавати плани витрат і доходів, а також переглядати свої фінансові цілі.</p>
-        <form>
-            <div class="form-group">
-                <label for="budget">Введіть суму бюджету:</label>
-                <input type="number" class="form-control" id="budget" placeholder="Введіть суму">
-            </div>
-            <button type="submit" class="btn btn-primary">Планувати</button>
-        </form>
+<div class="col-md-12" style="background-color: #f1f3f6; padding: 20px; border-radius: 10px;">
+    <h2 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Планування бюджета</h2>
+    <form method="post" action="{% url 'add_budget' %}" style="margin-bottom: 20px; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name" style="color: #2c3e50; font-size: 18px;">Назва Бюджета</label>
+            <input type="text" class="form-control" id="name" name="name" required style="border: 2px solid #d2b48c; font-size: 18px; padding: 10px;">
+        </div>
+        <div class="form-group">
+            <label for="category" style="color: #2c3e50; font-size: 18px;">Категорія</label>
+            <select class="form-control" id="category" name="category" required style="border: 2px solid #d2b48c; font-size: 18px; padding: 10px; height: 45px;">
+                <option value="Доход">Доход</option>
+                <option value="Витрати">Витрати</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="amount" style="color: #2c3e50; font-size: 18px;">Сума</label>
+            <input type="number" class="form-control" id="amount" name="amount" required style="border: 2px solid #d2b48c; font-size: 18px; padding: 10px;">
+        </div>
+        <div class="form-group">
+            <label for="date" style="color: #2c3e50; font-size: 18px;">Дата</label>
+            <input type="date" class="form-control" id="date" name="date" required style="border: 2px solid #d2b48c; font-size: 18px; padding: 10px;">
+        </div>
+        <button type="submit" class="btn btn-primary" style="font-size: 18px; padding: 10px 20px;">Додати Бюджет</button>
+    </form>
+    <h3 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Плановані Доходи та Витрати</h3>
+    <table class="table table-striped" style="background-color: #ffffff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <thead>
+            <tr>
+                <th scope="col">Назва</th>
+                <th scope="col">Категорія</th>
+                <th scope="col">Сума</th>
+                <th scope="col">Дата</th>
+                <th scope="col">Дія</th>  <!-- Добавляем столбец для действий -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for budget in budgets %}
+                <tr>
+                    <td>{{ budget.name }}</td>
+                    <td>{{ budget.category }}</td>
+                    <td>{{ budget.amount }}</td>
+                    <td>{{ budget.date }}</td>
+                    <td>
+                        <form method="post" action="{% url 'delete_budget' budget.id %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                        </form>
+                    </td>  <!-- Добавляем кнопку удаления -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h3 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Підсумок Бюджета</h3>
+    <div class="alert alert-info" style="font-size: 18px;">
+        Загальний дохід: {{ total_income }}<br>
+        Загальні витрати: {{ total_expense }}<br>
+        Залишок: {{ remaining_budget }}
     </div>
+</div>
 {% endblock %}

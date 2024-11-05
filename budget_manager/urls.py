@@ -16,18 +16,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from home import views  # Импортируем представления из приложения `home`
-
-from django.contrib import admin
-from django.urls import path, include
-from home import views  # Импортируем представления из приложения `home`
-
-from django.contrib import admin
-from django.urls import path, include
-from home import views  # Импортируем представления из приложения `home`
-
-from django.contrib import admin
-from django.urls import path, include
 from home import views
 
 urlpatterns = [
@@ -37,11 +25,15 @@ urlpatterns = [
     path('income-list/', views.income_list, name='income_list'),
     path('expense-list/', views.expense_list, name='expense_list'),
     path('expense-chart/', views.expense_chart, name='expense_chart'),
+    path('expense-income-chart/', views.expense_income_chart, name='expense_income_chart'),
     path('budget-planning/', views.budget_planning, name='budget_planning'),
+    path('add-budget/', views.budget_planning, name='add_budget'),
     path('financial-tips/', views.financial_tips, name='financial_tips'),
     path('add-expense/', views.add_expense, name='add_expense'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('profile/', views.profile, name='profile'),
     path('delete-income/<int:id>/', views.delete_income, name='delete_income'),
-    path('delete-expense/<int:id>/', views.delete_expense, name='delete_expense')
+    path('delete-expense/<int:id>/', views.delete_expense, name='delete_expense'),
+    path('income-chart/', views.income_chart, name='income_chart'),
+    path('signup/', views.signup, name='signup'),  # Новый маршрут для регистрации
 ]

@@ -22,6 +22,8 @@
             background-size: cover;
             height: 100vh;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
         }
         .center-column {
             background-color: #dcdde1;
@@ -62,22 +64,68 @@
             transform: scale(1.05);
             color: green;
         }
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            height: 100vh;
+        }
+        .flex-column {
+            flex: 1;
+            padding: 20px;
+            margin: 10px;
+            background-color: #f1f3f6;
+            border-radius: 10px;
+        }
+        .flex-column--main {
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+        .flex-column--sidebar { 
+            max-width: 300px; 
+            display: flex; 
+            flex-direction: column; 
+            background-color: #d2b48c; /* Восстановление цвета */ 
+            background-image: url("{% static 'images/pattern.png' %}"); 
+            background-size: cover;
+        }
+        .auth-button-login {
+             background-color: #007bff; 
+             color: white;  
+        } 
+        .auth-button-signup { 
+            background-color: #28a745;
+            color: white; 
+        } 
+        .auth-button-logout { 
+            background-color: #dc3545;
+            color: white;
+        } 
+        .auth-button:hover {
+            transform: scale(1.05);
+        }   
     </style>
 </head>
+
 <body>
     <div class="top-right-corner">
         {% if user.is_authenticated %}
-            <form method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Вийти</button>
-            </form>
+            <div class="auth-buttons">
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="auth-button auth-button-logout">Вийти</button>
+                </form>
+            </div>
         {% else %}
-            <a href="{% url 'login' %}" class="btn btn-primary">Увійти</a>
+            <div class="auth-buttons">
+                <a href="{% url 'login' %}" class="auth-button auth-button-login">Увійти</a> 
+                <a href="{% url 'signup' %}" class="auth-button auth-button-signup">Реєстрація</a>
+            </div>
         {% endif %}
     </div>
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-3 left-column">
+        <div class="flex-container">
+            <div class="flex-column flex-column--sidebar">
                 <nav class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'home_content' %}">Головна</a>
@@ -88,8 +136,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'expense_list' %}">Витрати</a>
                     </li>
+                    <li class="nav-item"> 
+                        <a class="nav-link" href="{% url 'income_chart' %}">Графіки Доходів</a> 
+                    </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'expense_chart' %}">Графіки</a>
+                        <a class="nav-link" href="{% url 'expense_chart' %}">Графіки Витрат</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'budget_planning' %}">Планування бюджета</a>
@@ -99,7 +150,7 @@
                     </li>
                 </nav>
             </div>
-            <div class="col-md-9">
+            <div class="flex-column flex-column--main">
                 <div id="content">
                     {% block content %}{% endblock %}
                 </div>
@@ -131,11 +182,11 @@
         </div>
     </div>
 
-
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const links = document.querySelectorAll('.nav-link');
@@ -152,7 +203,7 @@
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(html, 'text/html');
                         document.querySelector('#content').innerHTML = doc.querySelector('#content').innerHTML;
-                    // Перенаправляем на правильный URL для "Головна"
+                        // Перенаправляем на правильный URL для "Головна"
                         if (targetUrl === "{% url 'home_content' %}") {
                             history.replaceState(null, '', '/home_content');
                         }
@@ -160,7 +211,7 @@
                     .catch(err => console.error('Failed to fetch page: ', err));
             });
 
-        // Активируем ссылку "Головна" и обновляем URL при загрузке страницы
+            // Активируем ссылку "Головна" и обновляем URL при загрузке страницы
             if (window.location.pathname === '/') {
                 const homeLink = document.querySelector('.nav-link[href="{% url 'home_content' %}"]');
                 if (homeLink) {
@@ -169,7 +220,19 @@
                 }
             }
         });
-    });
 
+        // Перевод названий месяцев на украинский
+        const monthSelect = document.getElementById('month');
+        const monthNames = ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'];
+
+        // Обновим названия месяцев в селекторе
+        for (let i = 0; i < monthSelect.options.length; i++) {
+            const option = monthSelect.options[i];
+            const monthValue = option.value.split('-')[1];
+            const yearValue = option.value.split('-')[0];
+            option.text = `${monthNames[parseInt(monthValue) - 1]} ${yearValue}`;
+        }
+    });
 </script>
+
 </html>

@@ -1,8 +1,8 @@
 {% extends "home.html" %}
 {% block content %}
 <div class="col-md-12" style="background-color: #f1f3f6; padding: 20px; border-radius: 10px;">
-    <h2 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Графік Витрат</h2>
-    <form method="get" action="{% url 'expense_chart' %}" class="form-inline justify-content-center">
+    <h2 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Графік Доходів</h2>
+    <form method="get" action="{% url 'income_chart' %}" class="form-inline justify-content-center">
         <label for="month" class="mr-2" style="font-size: 18px;">Виберіть місяць:</label>
         <select id="month" name="month" class="form-control mr-2" required>
             <option value="2024-01">Січень</option>
@@ -29,17 +29,17 @@
                 <tr>
                     <th>Дата</th>
                     <th>Ім'я</th>
-                    <th>Категорія</th>
+                    <th>Джерело</th>
                     <th>Сума</th>
                 </tr>
             </thead>
             <tbody>
-                {% for expense in expenses %}
-                <tr style="background-color: {{ expense.color }}">
-                    <td>{{ expense.date }}</td>
-                    <td>{{ expense.name }}</td>
-                    <td>{{ expense.category }}</td>
-                    <td>{{ expense.amount }}</td>
+                {% for income in incomes %}
+                <tr style="background-color: {{ income.color }}">
+                    <td>{{ income.date }}</td>
+                    <td>{{ income.name }}</td>
+                    <td>{{ income.source }}</td>
+                    <td>{{ income.amount }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -47,7 +47,7 @@
     </div>
 
     <div style="text-align: center; margin-top: 20px;">
-        <img src="data:image/png;base64,{{ graphic }}" alt="Графік витрат" style="max-width: 100%; height: auto; border: 2px solid #d2b48c; border-radius: 10px;">
+        <img src="data:image/png;base64,{{ graphic }}" alt="Графік доходів" style="max-width: 100%; height: auto; border: 2px solid #d2b48c; border-radius: 10px;">
     </div>
 </div>
 {% endblock %}
