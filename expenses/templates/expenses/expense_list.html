@@ -1,27 +1,54 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <title>Список Витрат</title>
-</head>
-<body>
-    <div class="container mt-5">
-        <h1 class="text-center">Список Витрат</h1>
-        <ul class="list-group">
+{% extends "home.html" %}
+{% block content %}
+<div class="col-md-12" style="background-color: #f1f3f6; padding: 20px; border-radius: 10px;">
+    <h2 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Список Витрат</h2>
+    <form method="post" action="{% url 'add_expense' %}" style="margin-bottom: 20px; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name" style="color: #2c3e50; font-size: 18px;">Ім'я</label>
+            <input type="text" class="form-control" id="name" name="name" required style="border: 2px solid #d2b48c; font-size: 18px; padding: 10px;">
+        </div>
+        <div class="form-group">
+            <label for="category" style="color: #2c3e50; font-size: 18px;">Категорія</label>
+            <input type="text" class="form-control" id="category" name="category" required style="border: 2px solid #d2b48c; font-size: 18px; padding: 10px;">
+        </div>
+        <div class="form-group">
+            <label for="amount" style="color: #2c3e50; font-size: 18px;">Сума</label>
+            <input type="number" class="form-control" id="amount" name="amount" required style="border: 2px solid #d2b48c; font-size: 18px; padding: 10px;">
+        </div>
+        <div class="form-group">
+            <label for="date" style="color: #2c3e50; font-size: 18px;">Дата</label>
+            <input type="date" class="form-control" id="date" name="date" required style="border: 2px solid #d2b48c; font-size: 18px; padding: 10px;">
+        </div>
+        <button type="submit" class="btn btn-danger" style="font-size: 18px; padding: 10px 20px;">Додати Витрату</button>
+    </form>
+    <h3 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Існуючі Витрати</h3>
+    <table class="table table-striped" style="background-color: #ffffff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <thead>
+            <tr>
+                <th scope="col">Ім'я</th>
+                <th scope="col">Категорія</th>
+                <th scope="col">Сума</th>
+                <th scope="col">Дата</th>
+                <th scope="col">Дія</th>
+            </tr>
+        </thead>
+        <tbody>
             {% for expense in expenses %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <strong>{{ expense.category }}</strong> - {{ expense.amount }} ({{ expense.date }})
-                    </div>
-                    <button class="btn btn-danger btn-sm">Удалити</button>
-                </li>
+                <tr>
+                    <td>{{ expense.name }}</td>
+                    <td>{{ expense.category }}</td>
+                    <td>{{ expense.amount }}</td>
+                    <td>{{ expense.date }}</td>
+                    <td>
+                        <form method="post" action="{% url 'delete_expense' expense.id %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
             {% endfor %}
-        </ul>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

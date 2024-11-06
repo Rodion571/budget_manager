@@ -19,7 +19,7 @@ from django.urls import path, include
 from home import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+
     path('', views.home_content, name='home_content'),
     path('home/', views.home, name='home'),
     path('income-list/', views.income_list, name='income_list'),
@@ -35,5 +35,14 @@ urlpatterns = [
     path('delete-income/<int:id>/', views.delete_income, name='delete_income'),
     path('delete-expense/<int:id>/', views.delete_expense, name='delete_expense'),
     path('income-chart/', views.income_chart, name='income_chart'),
-    path('signup/', views.signup, name='signup'),  # Новый маршрут для регистрации
+    path('signup/', views.signup, name='signup'),
+    path('delete-budget/<int:id>/', views.delete_budget, name='delete_budget'),
+
+
+    path('accounts/', include(('accounts.urls', 'accounts'), namespace='accounts')),
+    path('home/', include(('home.urls', 'home'), namespace='home')),
+
+    path('admin/', admin.site.urls),
+
+    path('new_app/', include('new_app.urls', namespace='new_app')),
 ]

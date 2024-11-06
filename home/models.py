@@ -7,4 +7,5 @@ class Budget(models.Model):
     date = models.DateField()  # Дата
 
     def __str__(self):
-        return f"{self.name} - {self.category}: {self.amount} on {self.date}"
+        # Обновление строкового представления для отображения суммы с двумя десятичными знаками
+        return f"{self.name} - {self.category}: {self.amount:.2f} on {self.date}"

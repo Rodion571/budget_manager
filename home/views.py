@@ -2,13 +2,20 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from expenses.models import Expense
 from incomes.models import Income
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+import logging
 from django.db.models.functions import TruncMonth
 from django.http import JsonResponse
 from django.db.models import Sum
-
+from django.contrib.auth import login, authenticate
+from django import forms
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate
 import calendar
 from expenses.forms import ExpenseForm
-from .models import Budget # Добавляем импорт модели Budget
+from .models import Budget
 from incomes.forms import IncomeForm
 import matplotlib.colors as mcolors
 import random
@@ -48,28 +55,39 @@ def delete_income(request, id):
     return redirect('income_list')
 
 
-@login_required
-def add_income(request):
-    if request.method == "POST":
-        form = IncomeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('income_list')
-    else:
-        form = IncomeForm()
-    return render(request, 'add_income.html', {'form': form})
+
+logger = logging.getLogger(__name__)
 
 @login_required
 def add_expense(request):
+    logger.debug("add_expense called")
     if request.method == 'POST':
+        logger.debug("Handling POST request")
         name = request.POST['name']
         category = request.POST['category']
         amount = request.POST['amount']
         date = request.POST['date']
-        Expense.objects.create(name=name, category=category, amount=amount, date=date)
-        return redirect('expense_list')
-    return render(request, 'expense_list.html')
+        Budget.objects.create(name=name, category=category, amount=amount, date=date)
+        return redirect('home:expense_list')
+    return render(request, 'add_expense.html')
 
+import logging
+
+logger = logging.getLogger(__name__)
+
+@login_required
+def add_income(request):
+    logger.debug("add_income called")
+    if request.method == 'POST':
+        logger.debug("Handling POST request")
+        name = request.POST['name']
+        category = request.POST['category']
+        amount = request.POST['amount']
+        date = request.POST['date']
+        Budget.objects.create(name=name, category=category, amount=amount, date=date)
+        return redirect('home:expense_list')
+    logger.debug("Rendering add_income.html")
+    return render(request, 'add_income.html')
 
 @login_required
 def budget_planning(request):
@@ -232,7 +250,7 @@ def income_chart(request):
     }
     month_name = f"{ukr_months[month]} {year}"
 
-    return render(request, 'income_chart.html', {'items': incomes, 'month': selected_month, 'month_name': month_name, 'graphic': graphic, 'type': 'income'})
+    return render(request, 'income_chart.html', {'incomes': incomes, 'month': selected_month, 'month_name': month_name, 'graphic': graphic, 'type': 'income'})
 
 @login_required
 def expense_income_chart(request):
@@ -293,16 +311,6 @@ def expense_income_chart(request):
     return render(request, 'home.html',
                   {'items': items, 'month': selected_month, 'month_name': month_name, 'graphic': graphic,
                    'type': chart_type})
-
-
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, authenticate
-from django import forms
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, authenticate
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
