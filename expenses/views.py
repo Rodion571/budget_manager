@@ -2,9 +2,13 @@ import matplotlib.pyplot as plt
 import io
 import base64
 from django.shortcuts import render, redirect, get_object_or_404
+
 from expenses.models import Expense
 from incomes.models import Income
+
 from expenses.forms import ExpenseForm
+
+from .models import Expense
 from incomes.forms import IncomeForm
 from django.contrib.auth.decorators import login_required
 
@@ -14,16 +18,25 @@ def home(request):
     incomes = Income.objects.all()
     return render(request, 'home.html', {'expenses': expenses, 'incomes': incomes})
 
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from .models import Expense
+
 @login_required
 def add_expense(request):
-    if request.method == "POST":
-        form = ExpenseForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    else:
-        form = ExpenseForm()
-    return render(request, 'expenses/add_expense.html', {'form': form})
+    if request.method == 'POST':
+        name = request.POST['name']
+        amount = request.POST['amount']
+        date = request.POST['date']
+        Expense.objects.create(name=name, amount=amount, date=date)
+        return redirect('expenses:expense_list')
+    return render(request, 'add_expense.html')
+
+@login_required
+def expense_list(request):
+    expenses = Expense.objects.all()
+    return render(request, 'expense_list.html', {'expenses': expenses})
+
 
 @login_required
 def delete_expense(request, expense_id):
@@ -40,12 +53,9 @@ def add_income(request):
             return redirect('home')
     else:
         form = IncomeForm()
-    return render(request, 'incomes/add_income.html', {'form': form})
+    return render(request, 'incomes/../incomes/add_income.html', {'form': form})
 
-@login_required
-def expense_list(request):
-    expenses = Expense.objects.all()
-    return render(request, 'expenses/expense_list.html', {'expenses': expenses})
+
 
 @login_required
 def expense_chart(request):

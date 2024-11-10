@@ -27,7 +27,7 @@ class HomeTests(TestCase):
     def test_add_income_view(self):
         response = self.client.get(reverse('home:add_income'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'add_income.html')
+        self.assertTemplateUsed(response, 'incomes/add_income.html')
 
     def test_budget_planning_view(self):
         response = self.client.get(reverse('home:budget_planning'))

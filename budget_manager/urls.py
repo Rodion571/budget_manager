@@ -19,7 +19,7 @@ from django.urls import path, include
 from home import views
 
 urlpatterns = [
-
+    # Основные страницы
     path('', views.home_content, name='home_content'),
     path('home/', views.home, name='home'),
     path('income-list/', views.income_list, name='income_list'),
@@ -30,7 +30,6 @@ urlpatterns = [
     path('add-budget/', views.budget_planning, name='add_budget'),
     path('financial-tips/', views.financial_tips, name='financial_tips'),
     path('add-expense/', views.add_expense, name='add_expense'),
-    path('accounts/', include('django.contrib.auth.urls')),
     path('profile/', views.profile, name='profile'),
     path('delete-income/<int:id>/', views.delete_income, name='delete_income'),
     path('delete-expense/<int:id>/', views.delete_expense, name='delete_expense'),
@@ -38,11 +37,14 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('delete-budget/<int:id>/', views.delete_budget, name='delete_budget'),
 
-
+    # Включение других URL конфигураций
+    path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/', include(('accounts.urls', 'accounts'), namespace='accounts')),
     path('home/', include(('home.urls', 'home'), namespace='home')),
+    path('new_app/', include(('new_app.urls', 'new_app'), namespace='new_app')),
+    path('expenses/', include(('expenses.urls', 'expenses'), namespace='expenses')),
+    path('incomes/', include(('incomes.urls', 'incomes'), namespace='incomes')),
 
+    # Административная часть
     path('admin/', admin.site.urls),
-
-    path('new_app/', include('new_app.urls', namespace='new_app')),
 ]

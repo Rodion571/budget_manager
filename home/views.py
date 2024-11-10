@@ -60,9 +60,7 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def add_expense(request):
-    logger.debug("add_expense called")
     if request.method == 'POST':
-        logger.debug("Handling POST request")
         name = request.POST['name']
         category = request.POST['category']
         amount = request.POST['amount']
@@ -71,23 +69,16 @@ def add_expense(request):
         return redirect('home:expense_list')
     return render(request, 'add_expense.html')
 
-import logging
-
-logger = logging.getLogger(__name__)
-
 @login_required
 def add_income(request):
-    logger.debug("add_income called")
     if request.method == 'POST':
-        logger.debug("Handling POST request")
         name = request.POST['name']
         category = request.POST['category']
         amount = request.POST['amount']
         date = request.POST['date']
         Budget.objects.create(name=name, category=category, amount=amount, date=date)
         return redirect('home:expense_list')
-    logger.debug("Rendering add_income.html")
-    return render(request, 'add_income.html')
+    return render(request, 'incomes/add_income.html')
 
 @login_required
 def budget_planning(request):
