@@ -4,6 +4,10 @@ from django.contrib.auth import views as auth_views
 from django.urls import reverse
 from .forms import UserRegisterForm, UserLoginForm
 
+from django.contrib.auth import get_user_model
+
+
+
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -13,10 +17,17 @@ def register(request):
             password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=password)
             login(request, user)
+
+            # Проверка сохранения пользователя
+            User = get_user_model()
+            saved_user = User.objects.get(username=username)
+            print(f"User '{saved_user.username}' is_active: {saved_user.is_active}")
+
             return redirect(reverse('home_content'))
     else:
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
+
 
 def user_login(request):
     if request.method == 'POST':
