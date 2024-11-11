@@ -9,6 +9,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.urls import reverse
 from .forms import UserRegisterForm
+
 from .models import CustomUser
 def register(request):
     if request.method == 'POST':
