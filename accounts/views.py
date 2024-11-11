@@ -7,23 +7,22 @@ from .forms import UserRegisterForm, UserLoginForm
 from django.contrib.auth import get_user_model
 
 
-
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)  # Сохраняем пользователя без подтверждения сохранения
+            user.is_active = True  # Делаем пользователя активным
+            user.save()  # Сохраняем изменения
+
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
+
+            # Аутентификация и авторизация пользователя
             user = authenticate(username=username, password=password)
             login(request, user)
 
-            # Проверка сохранения пользователя
-            User = get_user_model()
-            saved_user = User.objects.get(username=username)
-            print(f"User '{saved_user.username}' is_active: {saved_user.is_active}")
-
-            return redirect(reverse('home_content'))
+            return redirect(reverse('home_content'))  # Перенаправляем на домашнюю страницу
     else:
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
