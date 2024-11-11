@@ -143,7 +143,7 @@ LOGOUT_REDIRECT_URL = '/accounts/login/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'statitfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'statiсfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -153,3 +153,6 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SESSION_COOKIE_DOMAIN = 'budget-manager2024.herokuapp.com'
+CSRF_COOKIE_DOMAIN = 'budget-manager2024.herokuapp.com'
