@@ -6,27 +6,24 @@ from .forms import UserRegisterForm, UserLoginForm
 
 from django.contrib.auth import get_user_model
 
-
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)  # Сохраняем пользователя без подтверждения сохранения
-            user.is_active = True  # Делаем пользователя активным
-            user.save()  # Сохраняем изменения
-
+            user = form.save(commit=False)
+            user.is_active = True
+            user.save()
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
-
-            # Аутентификация и авторизация пользователя
             user = authenticate(username=username, password=password)
-            login(request, user)
-
-            return redirect(reverse('home_content'))  # Перенаправляем на домашнюю страницу
+            if user is not None:
+                login(request, user)
+                return redirect(reverse('home_content'))
+            else:
+                print("Пользователь не аутентифицирован после регистрации.")
     else:
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
-
 
 def user_login(request):
     if request.method == 'POST':
@@ -38,9 +35,13 @@ def user_login(request):
             if user is not None:
                 login(request, user)
                 return redirect(reverse('home_content'))
+            else:
+                form.add_error(None, 'Неверные учетные данные')
+                print("Ошибка аутентификации: неверные учетные данные.")
     else:
         form = UserLoginForm()
     return render(request, 'login.html', {'form': form})
+
 
 def user_logout(request):
     logout(request)
