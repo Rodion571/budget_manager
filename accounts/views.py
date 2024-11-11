@@ -6,21 +6,21 @@ from .forms import UserRegisterForm, UserLoginForm
 
 from django.contrib.auth import get_user_model
 
+from .models import CustomUser
+
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.is_active = True
+            user.is_active = True  # Делаем пользователя активным
             user.save()
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=password)
+            user = authenticate(username=username, password=password, model=CustomUser)
             if user is not None:
                 login(request, user)
                 return redirect(reverse('home_content'))
-            else:
-                print("Пользователь не аутентифицирован после регистрации.")
     else:
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
