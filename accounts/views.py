@@ -7,6 +7,10 @@ from .forms import UserRegisterForm, UserLoginForm
 from django.contrib.auth import get_user_model
 
 from .models import CustomUser
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.urls import reverse
+from .forms import UserRegisterForm
 
 def register(request):
     if request.method == 'POST':
@@ -17,13 +21,14 @@ def register(request):
             user.save()
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=password, model=CustomUser)
+            user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
                 return redirect(reverse('home_content'))
     else:
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
+
 
 def user_login(request):
     if request.method == 'POST':
@@ -37,7 +42,6 @@ def user_login(request):
                 return redirect(reverse('home_content'))
             else:
                 form.add_error(None, 'Неверные учетные данные')
-                print("Ошибка аутентификации: неверные учетные данные.")
     else:
         form = UserLoginForm()
     return render(request, 'login.html', {'form': form})
