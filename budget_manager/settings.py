@@ -139,7 +139,7 @@ USE_TZ = True
 LOGIN_REDIRECT_URL = 'home_content'
 # Перенаправление после выхода
 LOGOUT_REDIRECT_URL = '/accounts/login/'
-
+LOGIN_URL = 'accounts:login'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 STATIC_URL = '/static/'
@@ -154,5 +154,5 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SESSION_COOKIE_DOMAIN = 'budget-manager2024.herokuapp.com'
-CSRF_COOKIE_DOMAIN = 'budget-manager2024.herokuapp.com'
+SESSION_COOKIE_DOMAIN = None
+CSRF_COOKIE_DOMAIN = None
