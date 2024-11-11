@@ -1,1 +1,1 @@
-web: gunicorn budget-manager2024.wsgi --log-file -
+web: gunicorn budget_manager.wsgi --log-file -
