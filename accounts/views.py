@@ -25,10 +25,9 @@ def register(request):
             if user is not None:
                 login(request, user)
                 return redirect(reverse('home_content'))
-    else:
-        form = UserRegisterForm()
-    return render(request, 'register.html', {'form': form})
-
+        else:
+            form = UserRegisterForm()
+        return render(request, 'register.html', {'form': form})
 
 def user_login(request):
     if request.method == 'POST':
