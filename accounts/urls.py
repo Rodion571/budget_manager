@@ -2,8 +2,8 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from .views import CustomLoginView
 from . import views
-
 from .views import register, user_login, user_logout, home
+
 app_name = 'accounts'
 
 urlpatterns = [

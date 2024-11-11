@@ -18,33 +18,19 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
 
-from flask import Flask, request, redirect, url_for, render_template
-from django.contrib.auth import authenticate, login
-from your_app.forms import UserLoginForm  # Путь к вашей форме
-
-app = Flask(__name__)
-
-@app.route('/login', methods=['GET', 'POST'])
-def user_login():
+def user_login(request):
     if request.method == 'POST':
-        form = UserLoginForm(data=request.form)
+        form = UserLoginForm(request, data=request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect(url_for('home_content'))  # Flask использует url_for для перенаправлений
+                return redirect(reverse('home_content'))
     else:
         form = UserLoginForm()
-    return render_template('login.html', {'form': form})
-
-@app.route('/home')
-def home_content():
-    return 'Welcome to the home page!'
-
-if __name__ == '__main__':
-    app.run()
+    return render(request, 'login.html', {'form': form})
 
 def user_logout(request):
     logout(request)
