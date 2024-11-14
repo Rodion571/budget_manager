@@ -1,17 +1,10 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth import views as auth_views
-from django.urls import reverse
-from .forms import UserRegisterForm, UserLoginForm
-
-
-from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.urls import reverse
-from .forms import UserRegisterForm
-from .models import CustomUser
-
-
+from django.contrib.auth import views as auth_views
+from django.contrib.auth import get_user_model
+from .forms import UserRegisterForm, UserLoginForm
+User = get_user_model()
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
