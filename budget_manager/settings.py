@@ -14,7 +14,7 @@ from pathlib import Path
 
 from django.conf.global_settings import DATABASES
 from dotenv import load_dotenv
-
+AUTH_USER_MODEL = 'accounts.CustomUser'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv('.env')
@@ -157,6 +157,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_COOKIE_SECURE = None
 SESSION_COOKIE_SECURE = None
-AUTH_USER_MODEL = 'accounts.CustomUser'
+
 
 
