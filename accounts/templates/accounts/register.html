@@ -4,8 +4,7 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{% static 'styles.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
     <title>Реєстрація</title>
 </head>
 <body>
@@ -28,7 +27,22 @@
         <h1 class="text-center">РЕЄСТРАЦІЯ</h1>
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
+            <div class="form-group">
+                <label for="id_username">Ім'я користувача</label>
+                <input type="text" name="username" class="form-control" id="id_username" required>
+            </div>
+            <div class="form-group">
+                <label for="id_email">Електронна пошта</label>
+                <input type="email" name="email" class="form-control" id="id_email" required>
+            </div>
+            <div class="form-group">
+                <label for="id_password1">Пароль</label>
+                <input type="password" name="password1" class="form-control" id="id_password1" required>
+            </div>
+            <div class="form-group">
+                <label for="id_password2">Підтвердження пароля</label>
+                <input type="password" name="password2" class="form-control" id="id_password2" required>
+            </div>
             <button type="submit" class="btn btn-primary btn-block">РЕЄСТРАЦІЯ</button>
         </form>
         {% if form.errors %}
