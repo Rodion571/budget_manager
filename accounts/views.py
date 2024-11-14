@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.contrib.auth import views as auth_views
 from django.contrib.auth import get_user_model
 from .forms import UserRegisterForm, UserLoginForm
+
 User = get_user_model()
 def register(request):
     if request.method == 'POST':
