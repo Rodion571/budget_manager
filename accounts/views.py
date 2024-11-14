@@ -24,9 +24,6 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
 
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from .forms import UserLoginForm
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
