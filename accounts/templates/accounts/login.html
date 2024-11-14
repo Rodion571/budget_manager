@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{% static 'styles.css' %}" rel="stylesheet"> <!-- Подключаем кастомный CSS файл -->
+    <link href="{% static 'styles.css' %}" rel="stylesheet">
     <title>Вхід</title>
 </head>
 <body>
@@ -15,8 +15,13 @@
             {{ form.as_p }}
             <button type="submit" class="btn btn-primary btn-block">Увійти</button>
         </form>
+        {% if form.errors %}
+            <div class="alert alert-danger mt-3">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
         <div class="text-center mt-3">
-            <a href="{% url 'register' %}" class="btn btn-secondary">Ще не маєте облікового запису? Зареєструватись</a>
+            <a href="{% url 'accounts:register' %}" class="btn btn-secondary">Ще не маєте облікового запису? Зареєструватись</a>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

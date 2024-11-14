@@ -4,20 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{% static 'styles.css' %}" rel="stylesheet"> <!-- Подключаем кастомный CSS файл -->
-    <title>Реєстрація</title>
+    <link href="{% static 'styles.css' %}" rel="stylesheet">
+    <title>Регистрация</title>
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="text-center">Реєстрація</h1>
+        <h1 class="text-center">Регистрация</h1>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn btn-primary btn-block">Зареєструватись</button>
+            <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
         </form>
-        <div class="text-center mt-3">
-            <a href="{% url 'login' %}" class="btn btn-secondary">Вже маєте обліковий запис? Увійти</a>
-        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

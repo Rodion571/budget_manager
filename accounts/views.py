@@ -22,7 +22,6 @@ def register(request):
                 return redirect(reverse('home_content'))
     else:
         form = UserRegisterForm()
-
     return render(request, 'register.html', {'form': form})
 
 def user_login(request):
