@@ -24,6 +24,10 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from .forms import UserLoginForm
+
 def user_login(request):
     if request.method == 'POST':
         form = UserLoginForm(request, data=request.POST)
@@ -33,9 +37,11 @@ def user_login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect(reverse('home_content'))
+                return redirect('home_content')
             else:
                 form.add_error(None, 'Неверные учетные данные')
+        else:
+            form.add_error(None, 'Некорректные данные формы')
     else:
         form = UserLoginForm()
     return render(request, 'login.html', {'form': form})
