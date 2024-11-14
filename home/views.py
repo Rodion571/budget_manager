@@ -315,6 +315,9 @@ class CustomUserCreationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+import logging
+
+logger = logging.getLogger(__name__)
 
 def signup(request):
     if request.method == 'POST':
@@ -324,8 +327,14 @@ def signup(request):
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=password)
-            login(request, user)
-            return redirect('home_content')
+            if user is not None:
+                login(request, user)
+                return redirect('home_content')
+            else:
+                logger.error(f'Authentication failed for user: {username}')
+                form.add_error(None, 'Ошибка аутентификации.')
+        else:
+            logger.error('Form is invalid')
     else:
         form = CustomUserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
