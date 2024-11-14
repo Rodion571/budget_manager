@@ -28,6 +28,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .forms import UserLoginForm
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from .forms import UserLoginForm
+
 def user_login(request):
     if request.method == 'POST':
         form = UserLoginForm(request, data=request.POST)
@@ -44,7 +48,7 @@ def user_login(request):
             form.add_error(None, 'Некорректные данные формы')
     else:
         form = UserLoginForm()
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'accounts/login.html', {'form': form})
 
 def user_logout(request):
     logout(request)
