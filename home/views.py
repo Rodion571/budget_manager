@@ -335,4 +335,4 @@ def signup(request):
             logger.error('Form is invalid')
     else:
         form = CustomUserCreationForm()
-    return render(request, 'registration.html', {'form': form})
+    return render(request, 'register.html', {'form': form})
