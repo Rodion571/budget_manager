@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from expenses.models import Expense
 from incomes.models import Income
 from django.contrib.auth.decorators import login_required
-import logging
 from django.db.models.functions import TruncMonth
 from django.http import JsonResponse
 from django.db.models import Sum
@@ -19,7 +18,7 @@ import matplotlib.pyplot as plt
 import io
 import base64
 from django.contrib.auth import get_user_model
-
+import logging
 User = get_user_model()
 
 # Ваша модель пользователя CustomUser используется через get_user_model()
@@ -315,7 +314,6 @@ class CustomUserCreationForm(UserCreationForm):
         if commit:
             user.save()
         return user
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -337,4 +335,4 @@ def signup(request):
             logger.error('Form is invalid')
     else:
         form = CustomUserCreationForm()
-    return render(request, 'registration/signup.html', {'form': form})
+    return render(request, 'registration.html', {'form': form})

@@ -7,7 +7,7 @@ class UserRegisterForm(UserCreationForm):
 
     class Meta:
         model = get_user_model()
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'email',]
 
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(max_length=100)
