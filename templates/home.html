@@ -4,6 +4,18 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'styles.css' %}" rel="stylesheet">
+    <title>Домашня бухгалтерія: облік розходу та доходу, планування бюджету</title>
+</head>
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'styles.css' %}" rel="stylesheet">
     <title>Регистрация</title>
@@ -41,13 +53,13 @@
                         <a class="nav-link" href="{% url 'income_chart' %}">Графіки Доходів</a> 
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'expense_chart' %}">Графіки Витрат</а>
+                        <a class="nav-link" href="{% url 'expense_chart' %}">Графіки Витрат</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'budget_planning' %}">Планування бюджета</а>
+                        <a class="nav-link" href="{% url 'budget_planning' %}">Планування бюджета</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'financial_tips' %}">Фінансові поради</а>
+                        <a class="nav-link" href="{% url 'financial_tips' %}">Фінансові поради</a>
                     </li>
                 </nav>
             </div>
@@ -73,7 +85,7 @@
                 <div><strong>Графік роботи:</strong> Пн-Пт з 8:00 до 19:00</div>
             </div>
             <div class="col-md-3">
-                <img src="{% static 'images/soc.seti.jpg' %}" alt="Соціальні мережі" style="width: 125px; height: 125px; margin-bottom: 5px;">
+                <img src="{% static 'images/soc.seti.jpg' %}" alt="Социальные сети" style="width: 125px; height: 125px; margin-bottom: 5px;">
                 <div><strong>Соціальні мережі:</strong>
                     <a href="https://www.facebook.com" target="_blank" style="color: white; margin-left: 5px;"><i class="fab fa-facebook"></i></a>
                     <a href="https://www.twitter.com" target="_blank" style="color: white; margin-left: 5px;"><i class="fab fa-twitter"></i></a>
@@ -87,7 +99,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
-</html>
 
 
 <script>
