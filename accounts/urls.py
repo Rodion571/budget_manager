@@ -1,6 +1,4 @@
 from django.urls import path
-
-from incomes.urls import app_name
 from .views import register, user_login, user_logout, home
 
 app_name = 'accounts'
