@@ -9,12 +9,17 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="text-center">Регистрация</h1>
+        <h1 class="text-center">РЕЄСТРАЦІЯ</h1>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
+            <button type="submit" class="btn btn-primary btn-block">РЕЄСТРАЦІЯ</button>
         </form>
+        {% if form.errors %}
+            <div class="alert alert-danger mt-3">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
