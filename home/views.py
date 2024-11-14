@@ -1,8 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
 from expenses.models import Expense
 from incomes.models import Income
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import logging
 from django.db.models.functions import TruncMonth
@@ -10,10 +8,7 @@ from django.http import JsonResponse
 from django.db.models import Sum
 from django.contrib.auth import login, authenticate
 from django import forms
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, authenticate
-import calendar
 from expenses.forms import ExpenseForm
 from .models import Budget
 from incomes.forms import IncomeForm
@@ -23,6 +18,11 @@ import datetime
 import matplotlib.pyplot as plt
 import io
 import base64
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+# Ваша модель пользователя CustomUser используется через get_user_model()
 
 def home(request):
     return render(request, 'home.html')
@@ -145,9 +145,6 @@ def expense_chart(request):
 @login_required
 def financial_tips(request):
     return render(request, 'financial_tips.html')
-
-
-
 
 @login_required
 def expense_chart(request):
@@ -302,6 +299,8 @@ def expense_income_chart(request):
     return render(request, 'home.html',
                   {'items': items, 'month': selected_month, 'month_name': month_name, 'graphic': graphic,
                    'type': chart_type})
+
+User = get_user_model()
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
