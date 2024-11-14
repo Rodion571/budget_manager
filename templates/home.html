@@ -10,6 +10,16 @@
     <title>Домашня бухгалтерія: облік розходу та доходу, планування бюджету</title>
 </head>
 
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'styles.css' %}" rel="stylesheet">
+    <title>Регистрация</title>
+</head>
 <body>
     <div class="top-right-corner">
         {% if user.is_authenticated %}
@@ -81,7 +91,6 @@
                     <a href="https://www.twitter.com" target="_blank" style="color: white; margin-left: 5px;"><i class="fab fa-twitter"></i></a>
                     <a href="https://www.linkedin.com" target="_blank" style="color: white; margin-left: 5px;"><i class="fab fa-linkedin"></i></a>
                 </div>
-
             </div>
         </div>
     </div>
@@ -90,6 +99,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
