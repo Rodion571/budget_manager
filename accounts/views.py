@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.contrib.auth import views as auth_views
 from django.contrib.auth import get_user_model
+from django.utils.translation import activate
 from .forms import UserRegisterForm, UserLoginForm
 
 User = get_user_model()
@@ -22,16 +23,7 @@ def register(request):
                 return redirect(reverse('home_content'))
     else:
         form = UserRegisterForm()
-    return render(request, 'register.html', {'form': form})
-
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from .forms import UserLoginForm
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from .forms import UserLoginForm
+    return render(request, 'accounts/register.html', {'form': form})
 
 def user_login(request):
     if request.method == 'POST':
@@ -59,7 +51,14 @@ def user_logout(request):
     return redirect(reverse('home_content'))
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'home/home_content.html')
 
 class CustomLoginView(auth_views.LoginView):
     template_name = 'accounts/login.html'
+
+def set_language(request):
+    user_language = request.GET.get('language', 'en')
+    activate(user_language)
+    response = redirect(request.META.get('HTTP_REFERER'))
+    response.set_cookie('django_language', user_language)
+    return response

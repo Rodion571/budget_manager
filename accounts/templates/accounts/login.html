@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'styles.css' %}" rel="stylesheet">
-    <title>Вхід</title>
+    <title>{% trans "Login" %}</title>
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="text-center">Вхід</h1>
+        <h1 class="text-center">{% trans "Login" %}</h1>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn btn-primary btn-block">Увійти</button>
+            <button type="submit" class="btn btn-primary btn-block">{% trans "Sign in" %}</button>
         </form>
         {% if form.errors %}
             <div class="alert alert-danger mt-3">
@@ -22,7 +22,12 @@
             </div>
         {% endif %}
         <div class="text-center mt-3">
-            <a href="{% url 'accounts:register' %}" class="btn btn-secondary">Ще не маєте облікового запису? Зареєструватись</a>
+            <a href="{% url 'accounts:register' %}" class="btn btn-secondary">{% trans "Don't have an account? Register" %}</a>
+        </div>
+        <div class="text-center mt-3">
+            <a href="{% url 'accounts:set_language' %}?language=en" class="btn btn-link">English</a>
+            <a href="{% url 'accounts:set_language' %}?language=uk" class="btn btn-link">Українська</a>
+            <a href="{% url 'accounts:set_language' %}?language=fr" class="btn btn-link">Français</a> <!-- Добавляем французский язык -->
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

@@ -45,7 +45,10 @@ INSTALLED_APPS = [
     'incomes.apps.IncomesConfig',
     'accounts.apps.AccountsConfig',
     'home.apps.HomeConfig',
-    'new_app.apps.NewAppConfig'
+    'new_app.apps.NewAppConfig',
+    'translations.apps.TranslationsConfig',
+    'locales.apps.LocalesConfig'
+
 ]
 
 MIDDLEWARE = [
@@ -57,6 +60,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'translations.middleware.UserLanguageMiddleware',
 ]
 
 ROOT_URLCONF = 'budget_manager.urls'
@@ -73,6 +78,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n'
             ],
         },
     },
@@ -128,12 +134,23 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+from django.utils.translation import gettext_lazy as _
+# budget_manager/settings.py
+LANGUAGE_CODE = 'uk'
+LANGUAGES = [
+    ('en', 'English'),
+    ('uk', 'Ukrainian'),
+    ('fr', 'French'),
+]
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locales'),
+    os.path.join(BASE_DIR, 'translations', 'locales'),
+]
 
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
-
+USE_L10N = True
 USE_TZ = True
 
 LOGIN_REDIRECT_URL = 'home_content'

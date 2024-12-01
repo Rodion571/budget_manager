@@ -1,8 +1,9 @@
 {% extends "home.html" %}
 {% load static %}
+{% load i18n %}
 {% block content %}
-    <h1 class="text-center">Домашня бухгалтерія: облік розходу та доходу, планування бюджета</h1>
+    <h1 class="text-center">{% trans "Домашня бухгалтерія: облік розходу та доходу, планування бюджета" %}</h1>
     <div class="text-center mb-4">
-        <img src="{% static 'images/new_image.jpg' %}" class="img-fluid" alt="Головне Зображення">
+        <img src="{% static 'images/new_image.jpg' %}" class="img-fluid" alt="{% trans "Головне Зображення" %}">
     </div>
 {% endblock %}

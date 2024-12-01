@@ -1,0 +1,27 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Logout"
+msgstr "Logout"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "Income"
+msgstr "Income"
+
+msgid "Expenses"
+msgstr "Expenses"
+
+msgid "Income Charts"
+msgstr "Income Charts"
+
+msgid "Expense Charts"
+msgstr "Expense Charts"
+
+msgid "Budget Planning"
+msgstr "Budget Planning"
+
+msgid "Financial Advice"
+msgstr "Financial Advice"

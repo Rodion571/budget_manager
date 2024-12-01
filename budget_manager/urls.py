@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from home import views
-
+from django.conf.urls.i18n import set_language
 urlpatterns = [
     # Основные страницы
     path('', views.home_content, name='home_content'),
@@ -41,10 +41,12 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/', include(('accounts.urls', 'accounts'), namespace='accounts')),
     path('home/', include(('home.urls', 'home'), namespace='home')),
+    path('home_content/', views.home_content, name='home_content'),
     path('new_app/', include(('new_app.urls', 'new_app'), namespace='new_app')),
     path('expenses/', include(('expenses.urls', 'expenses'), namespace='expenses')),
     path('incomes/', include(('incomes.urls', 'incomes'), namespace='incomes')),
-
+    path('translations/', include('translations.urls')),
+    path('i18n/setlang/', set_language, name='set_language'),
     # Административная часть
     path('admin/', admin.site.urls),
 ]

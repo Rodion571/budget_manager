@@ -2,11 +2,12 @@
 <html lang="uk">
 <head>
     {% load static %}
+    {% load i18n %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'styles.css' %}" rel="stylesheet">
-    <title>Реєстрація</title>
+    <title>{% trans "Registration" %}</title>
 </head>
 <body>
     <div class="top-right-corner">
@@ -14,45 +15,72 @@
             <div class="auth-buttons">
                 <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
-                    <button type="submit" class="auth-button auth-button-logout">Вийти</button>
+                    <button type="submit" class="auth-button auth-button-logout">{% trans "Logout" %}</button>
                 </form>
             </div>
         {% else %}
             <div class="auth-buttons">
-                <a href="{% url 'login' %}" class="auth-button auth-button-login">Увійти</a>
-                <a href="{% url 'signup' %}" class="auth-button auth-button-signup">Реєстрація</a>
+                <a href="{% url 'login' %}" class="auth-button auth-button-login">{% trans "Login" %}</a>
+                <a href="{% url 'signup' %}" class="auth-button auth-button-signup">{% trans "Register" %}</a>
             </div>
         {% endif %}
     </div>
     <div class="container mt-5">
-        <h1 class="text-center">РЕЄСТРАЦІЯ</h1>
+        <h1 class="text-center">{% trans "Registration" %}</h1>
         <form method="post">
             {% csrf_token %}
             <div class="form-group">
-                <label for="id_username">Ім'я користувача</label>
+                <label for="id_username">{% trans "Username" %}</label>
                 <input type="text" name="username" class="form-control" id="id_username" required>
+                {% for error in form.username.errors %}
+                    <div class="text-danger">
+                        {% trans error %}
+                    </div>
+                {% endfor %}
             </div>
             <div class="form-group">
-                <label for="id_email">Електронна пошта</label>
+                <label for="id_email">{% trans "Email" %}</label>
                 <input type="email" name="email" class="form-control" id="id_email" required>
+                {% for error in form.email.errors %}
+                    <div class="text-danger">
+                        {% trans error %}
+                    </div>
+                {% endfor %}
             </div>
             <div class="form-group">
-                <label for="id_password1">Пароль</label>
+                <label for="id_password1">{% trans "Password" %}</label>
                 <input type="password" name="password1" class="form-control" id="id_password1" required>
+                {% for error in form.password1.errors %}
+                    <div class="text-danger">
+                        {% trans error %}
+                    </div>
+                {% endfor %}
             </div>
             <div class="form-group">
-                <label for="id_password2">Підтвердження пароля</label>
+                <label for="id_password2">{% trans "Confirm Password" %}</label>
                 <input type="password" name="password2" class="form-control" id="id_password2" required>
+                {% for error in form.password2.errors %}
+                    <div class="text-danger">
+                        {% trans error %}
+                    </div>
+                {% endfor %}
             </div>
-            <button type="submit" class="btn btn-primary btn-block">РЕЄСТРАЦІЯ</button>
+            <button type="submit" class="btn btn-primary btn-block">{% trans "Register" %}</button>
         </form>
-        {% if form.errors %}
+        {% if form.non_field_errors %}
             <div class="alert alert-danger mt-3">
-                {{ form.non_field_errors }}
+                {% for error in form.non_field_errors %}
+                    {% trans error %}
+                {% endfor %}
             </div>
         {% endif %}
         <div class="text-center mt-3">
-            <a href="{% url 'login' %}" class="btn btn-secondary">Вже маєте обліковий запис? Увійти</a>
+            <a href="{% url 'login' %}" class="btn btn-secondary">{% trans "Already have an account? Log in" %}</a>
+        </div>
+        <div class="text-center mt-3">
+            <a href="{% url 'accounts:set_language' %}?language=en" class="btn btn-link">English</a>
+            <a href="{% url 'accounts:set_language' %}?language=uk" class="btn btn-link">Українська</a>
+            <a href="{% url 'accounts:set_language' %}?language=fr" class="btn btn-link">Français</a>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
