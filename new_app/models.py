@@ -1,11 +1,13 @@
-from django.conf import settings
-from django.db import models
+from django.apps import AppConfig
 
-class Post(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.title
+class NewAppConfig(AppConfig):
+    """
+    Configuration for the new_app application.
+
+    Attributes:
+        default_auto_field (str): The type of auto field to use for primary keys.
+        name (str): The name of the application.
+    """
+    default_auto_field: str = 'django.db.models.BigAutoField'
+    name: str = 'new_app'

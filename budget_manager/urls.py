@@ -14,12 +14,15 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include
 from home import views
 from django.conf.urls.i18n import set_language
-urlpatterns = [
-    # Основные страницы
+from typing import List
+
+urlpatterns: List[path] = [
+    # base URL
     path('', views.home_content, name='home_content'),
     path('home/', views.home, name='home'),
     path('income-list/', views.income_list, name='income_list'),
@@ -37,7 +40,7 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('delete-budget/<int:id>/', views.delete_budget, name='delete_budget'),
 
-    # Включение других URL конфигураций
+    # more URL
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/', include(('accounts.urls', 'accounts'), namespace='accounts')),
     path('home/', include(('home.urls', 'home'), namespace='home')),
@@ -47,6 +50,7 @@ urlpatterns = [
     path('incomes/', include(('incomes.urls', 'incomes'), namespace='incomes')),
     path('translations/', include('translations.urls')),
     path('i18n/setlang/', set_language, name='set_language'),
-    # Административная часть
+
+    # admin
     path('admin/', admin.site.urls),
 ]

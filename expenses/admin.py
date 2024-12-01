@@ -1,8 +1,13 @@
-# expenses/admin.py
 from django.contrib import admin
 from expenses.models import Expense
 
 class ExpenseAdmin(admin.ModelAdmin):
-    list_display = ('name', 'amount', 'date', 'category')  # замените name на существующие поля
+    """
+    Admin configuration for the Expense model.
+
+    Attributes:
+        list_display (tuple): Fields to display in the admin list view.
+    """
+    list_display: tuple = ('name', 'amount', 'date', 'category')
 
 admin.site.register(Expense, ExpenseAdmin)

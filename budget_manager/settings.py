@@ -154,7 +154,6 @@ USE_L10N = True
 USE_TZ = True
 
 LOGIN_REDIRECT_URL = 'home_content'
-# Перенаправление после выхода
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 LOGIN_URL = 'accounts:login'
 # Static files (CSS, JavaScript, Images)
