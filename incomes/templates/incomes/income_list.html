@@ -1,15 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="uk">
 <head>
-    <title>Список доходов</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Список Доходів</title>
 </head>
 <body>
-    <h1>Список доходов</h1>
-    <a href="{% url 'add_income' %}">Добавить доход</a>
-    <ul>
-        {% for income in incomes %}
-            <li>{{ income.name }} - {{ income.amount }} ({{ income.date }})</li>
-        {% endfor %}
-    </ul>
+    <div class="container mt-5">
+        <h1 class="text-center">Список Доходів</h1>
+        <a href="{% url 'add_income' %}" class="btn btn-primary mb-3">Додати Доход</a>
+        <ul class="list-group">
+            {% for income in incomes %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ income.name }} - {{ income.amount }} ({{ income.date }})</span>
+                </li>
+            {% endfor %}
+        </ul>
+        {% if form.errors %}
+            <div class="alert alert-danger mt-3">
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% if form.non_field_errors %}
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -8,6 +8,13 @@
         <div class="form-group">
             <label for="name" style="color: #2c3e50; font-size: 18px;">{% trans "Назва Бюджета" %}</label>
             <input type="text" class="form-control" id="name" name="name" required style="border: 2px solid #d2b48c; font-size: 18px; padding: 10px;">
+            {% if form.name.errors %}
+                <div class="text-danger">
+                    {% for error in form.name.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
         <div class="form-group">
             <label for="category" style="color: #2c3e50; font-size: 18px;">{% trans "Категорія" %}</label>
@@ -15,17 +22,45 @@
                 <option value="Доход">{% trans "Доход" %}</option>
                 <option value="Витрати">{% trans "Витрати" %}</option>
             </select>
+            {% if form.category.errors %}
+                <div class="text-danger">
+                    {% for error in form.category.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
         <div class="form-group">
             <label for="amount" style="color: #2c3e50; font-size: 18px;">{% trans "Сума" %}</label>
             <input type="number" class="form-control" id="amount" name="amount" required style="border: 2px solid #d2b48c; font-size: 18px; padding: 10px;">
+            {% if form.amount.errors %}
+                <div class="text-danger">
+                    {% for error in form.amount.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
         <div class="form-group">
             <label for="date" style="color: #2c3e50; font-size: 18px;">{% trans "Дата" %}</label>
             <input type="date" class="form-control" id="date" name="date" required style="border: 2px solid #d2b48c; font-size: 18px; padding: 10px;">
+            {% if form.date.errors %}
+                <div class="text-danger">
+                    {% for error in form.date.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
         <button type="submit" class="btn btn-primary" style="font-size: 18px; padding: 10px 20px;">{% trans "Додати Бюджет" %}</button>
     </form>
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger mt-3">
+            {% for error in form.non_field_errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    {% endif %}
     <h3 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">{% trans "Плановані Доходи та Витрати" %}</h3>
     <table class="table table-striped" style="background-color: #ffffff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
         <thead>
@@ -34,7 +69,7 @@
                 <th scope="col">{% trans "Категорія" %}</th>
                 <th scope="col">{% trans "Сума" %}</th>
                 <th scope="col">{% trans "Дата" %}</th>
-                <th scope="col">{% trans "Дія" %}</th>  <!-- Добавляем столбец для действий -->
+                <th scope="col">{% trans "Дія" %}</th>
             </tr>
         </thead>
         <tbody>
@@ -49,7 +84,7 @@
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger btn-sm">{% trans "Видалити" %}</button>
                         </form>
-                    </td>  <!-- Добавляем кнопку удаления -->
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

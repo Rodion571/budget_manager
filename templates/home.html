@@ -55,7 +55,41 @@
             </div>
             <div class="flex-column flex-column--main">
                 <div id="content">
-                    {% block content %}{% endblock %}
+                    {% block content %}
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="name">{% trans "Ім'я" %}</label>
+                                <input type="text" class="form-control" id="name" name="name">
+                                {% if form.name.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.name.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="amount">{% trans "Сума" %}</label>
+                                <input type="text" class="form-control" id="amount" name="amount">
+                                {% if form.amount.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.amount.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <button type="submit" class="btn btn-primary">{% trans "Підтвердити" %}</button>
+                        </form>
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger mt-3">
+                                {% for error in form.non_field_errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endblock %}
                 </div>
             </div>
         </div>
@@ -63,7 +97,7 @@
     <div class="footer">
         <div class="row">
             <div class="col-md-3">
-                <img src="{% static 'images/kiev.jpg' %}" alt="Киев" style="width: 125px; height: 125px; margin-bottom: 5px;">
+                <img src="{% static 'images/kiev.jpg' %}" alt="Київ" style="width: 125px; height: 125px; margin-bottom: 5px;">
                 <div><strong>{% trans "Місцезнаходження:" %}</strong> <a href="https://www.google.com/maps?q=Київ,вулиця+Прикладна,123" target="_blank" style="color: white;"><i class="fas fa-map-marker-alt" style="margin-right: 5px;"></i>{% trans "Київ, вулиця Прикладна, 123" %}</a></div>
             </div>
             <div class="col-md-3">
@@ -71,11 +105,11 @@
                 <div><strong>{% trans "Телефон:" %}</strong> +380 44 123 4567</div>
             </div>
             <div class="col-md-3">
-                <img src="{% static 'images/calendar.jfif' %}" alt="График работы" style="width: 125px; height: 125px; margin-bottom: 5px;">
+                <img src="{% static 'images/calendar.jfif' %}" alt="Графік роботи" style="width: 125px; height: 125px; margin-bottom: 5px;">
                 <div><strong>{% trans "Графік роботи:" %}</strong> {% trans "Пн-Пт з 8:00 до 19:00" %}</div>
             </div>
             <div class="col-md-3">
-                <img src="{% static 'images/soc.seti.jpg' %}" alt="Социальные сети" style="width: 125px; height: 125px; margin-bottom: 5px;">
+                <img src="{% static 'images/soc.seti.jpg' %}" alt="Соціальні мережі" style="width: 125px; height: 125px; margin-bottom: 5px;">
                 <div><strong>{% trans "Соціальні мережі:" %}</strong>
                     <a href="https://www.facebook.com" target="_blank" style="color: white; margin-left: 5px;"><i class="fab fa-facebook"></i></a>
                     <a href="https://www.twitter.com" target="_blank" style="color: white; margin-left: 5px;"><i class="fab fa-twitter"></i></a>
@@ -95,10 +129,11 @@
             </select>
         </form>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+</html>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const links = document.querySelectorAll('.nav-link');
@@ -115,7 +150,7 @@
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(html, 'text/html');
                         document.querySelector('#content').innerHTML = doc.querySelector('#content').innerHTML;
-                        // Перенаправляем на правильный URL для "Головна"
+                       
                         if (targetUrl === "{% url 'home_content' %}") {
                             history.replaceState(null, '', '/home_content');
                         }
@@ -123,7 +158,6 @@
                     .catch(err => console.error('Failed to fetch page: ', err));
             });
 
-            // Активируем ссылку "Головна" и обновляем URL при загрузке страницы
             if (window.location.pathname === '/') {
                 const homeLink = document.querySelector('.nav-link[href="{% url 'home_content' %}"]');
                 if (homeLink) {
@@ -132,12 +166,10 @@
                 }
             }
         });
-
-        // Перевод названий месяцев на украинский
+        
         const monthSelect = document.getElementById('month');
         const monthNames = ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'];
 
-        // Обновим названия месяцев в селекторе
         for (let i = 0; i < monthSelect.options.length; i++) {
             const option = monthSelect.options[i];
             const monthValue = option.value.split('-')[1];
@@ -146,4 +178,3 @@
         }
     });
 </script>
-</html>

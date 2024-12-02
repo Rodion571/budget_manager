@@ -8,6 +8,6 @@ class IncomeAdmin(admin.ModelAdmin):
     Attributes:
         list_display (tuple): Fields to display in the admin list view.
     """
-    list_display: tuple = ('source', 'amount', 'date')
+    list_display: tuple = ('name', 'amount', 'date')
 
 admin.site.register(Income, IncomeAdmin)

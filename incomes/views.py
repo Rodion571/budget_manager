@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
 from .models import Income
+from .forms import IncomeForm
 
 @login_required
 def add_income(request: HttpRequest) -> HttpResponse:
@@ -15,23 +16,23 @@ def add_income(request: HttpRequest) -> HttpResponse:
         HttpResponse: The HTTP response object with the rendered add income page.
     """
     if request.method == 'POST':
-        name = request.POST['name']
-        amount = request.POST['amount']
-        date = request.POST['date']
-        Income.objects.create(name=name, amount=amount, date=date)
-        return redirect('incomes:income_list')
-    return render(request, 'incomes/add_income.html')
+        form = IncomeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('incomes:income_list')
+    else:
+        form = IncomeForm()
+    return render(request, 'incomes/add_income.html', {'form': form})
 
 @login_required
 def income_list(request: HttpRequest) -> HttpResponse:
-    """
-    Render the income list page.
-
-    Args:
-        request (HttpRequest): The HTTP request object.
-
-    Returns:
-        HttpResponse: The HTTP response object with the rendered income list page.
-    """
+    """Render the income list and handle new income creation."""
+    if request.method == 'POST':
+        form = IncomeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('income_list')
+    else:
+        form = IncomeForm()
     incomes = Income.objects.all()
-    return render(request, 'income_list.html', {'incomes': incomes})
+    return render(request, 'income_list.html', {'form': form, 'incomes': incomes})

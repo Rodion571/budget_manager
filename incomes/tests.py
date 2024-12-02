@@ -3,18 +3,13 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from .models import Income
+from incomes.forms import IncomeForm
 
 User = get_user_model()
-
 
 class IncomeTests(TestCase):
     """
     Test case for the Income model views.
-
-    Methods:
-        setUp(): Set up a test user and log them in.
-        test_income_list_view(): Test the income list view.
-        test_add_income_view(): Test the add income view.
     """
 
     def setUp(self) -> None:
@@ -51,3 +46,17 @@ class IncomeTests(TestCase):
         response: HttpResponse = self.client.get(reverse('incomes:add_income'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'incomes/add_income.html')
+
+    def test_add_income_view_post(self) -> None:
+        """
+        Test the add income view POST method with invalid data.
+        """
+        response = self.client.post(reverse('incomes:add_income'), {
+            'name': 'Test Income',
+            'source': 'Job',
+            'amount': -100,
+            'date': '2024-12-02'
+        })
+        form = response.context['form']
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['amount'], ['Сума повинна бути позитивним числом.'])

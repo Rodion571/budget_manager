@@ -3,7 +3,7 @@ from django.apps import AppConfig
 
 class AccountsConfig(AppConfig):
     """
-    Configuration for the accounts application.
+    Configuration for the accounts' application.
 
     Attributes:
         default_auto_field (str): The type of auto field to use for primary keys.

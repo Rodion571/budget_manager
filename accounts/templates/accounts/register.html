@@ -65,6 +65,15 @@
                     </div>
                 {% endfor %}
             </div>
+            <div class="form-group">
+                <label for="id_date_of_birth">{% trans "Date of Birth" %}</label>
+                <input type="date" name="date_of_birth" class="form-control" id="id_date_of_birth" required>
+                {% for error in form.date_of_birth.errors %}
+                    <div class="text-danger">
+                        {% trans error %}
+                    </div>
+                {% endfor %}
+            </div>
             <button type="submit" class="btn btn-primary btn-block">{% trans "Register" %}</button>
         </form>
         {% if form.non_field_errors %}

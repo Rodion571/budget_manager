@@ -5,6 +5,7 @@
     <form method="get" action="{% url 'expense_chart' %}" class="form-inline justify-content-center">
         <label for="month" class="mr-2" style="font-size: 18px;">Виберіть місяць:</label>
         <select id="month" name="month" class="form-control mr-2" required>
+            <option value="">-- Оберіть місяць --</option>
             <option value="2024-01">Січень</option>
             <option value="2024-02">Лютий</option>
             <option value="2024-03">Березень</option>
@@ -20,6 +21,13 @@
         </select>
         <button type="submit" class="btn btn-primary">Показати</button>
     </form>
+    {% if form.month.errors %}
+        <div class="text-danger mt-2" style="text-align: center;">
+            {% for error in form.month.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <h3 style="color: #2c3e50; text-align: center; margin-top: 20px;">{{ month_name }}</h3>
 

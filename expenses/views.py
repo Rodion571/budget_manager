@@ -38,12 +38,13 @@ def add_expense(request: HttpRequest) -> HttpResponse:
         HttpResponse: The HTTP response object with the rendered add expense page.
     """
     if request.method == 'POST':
-        name = request.POST['name']
-        amount = request.POST['amount']
-        date = request.POST['date']
-        Expense.objects.create(name=name, amount=amount, date=date)
-        return redirect('expenses:expense_list')
-    return render(request, 'add_expense.html')
+        form = ExpenseForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('expenses:expense_list')
+    else:
+        form = ExpenseForm()
+    return render(request, 'add_expense.html', {'form': form})
 
 @login_required
 def expense_list(request: HttpRequest) -> HttpResponse:
@@ -93,7 +94,7 @@ def add_income(request: HttpRequest) -> HttpResponse:
             return redirect('home')
     else:
         form = IncomeForm()
-    return render(request, 'incomes/../incomes/add_income.html', {'form': form})
+    return render(request, 'incomes/add_income.html', {'form': form})
 
 @login_required
 def expense_chart(request: HttpRequest) -> HttpResponse:
@@ -112,9 +113,9 @@ def expense_chart(request: HttpRequest) -> HttpResponse:
 
     plt.figure(figsize=(10, 5))
     plt.bar(categories, amounts, color='blue')
-    plt.xlabel('Категории')
-    plt.ylabel('Сумма')
-    plt.title('Распределение расходов по категориям')
+    plt.xlabel('Категорії')
+    plt.ylabel('Сума')
+    plt.title('Розподіл витрат за категоріями')
 
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png')
@@ -125,3 +126,17 @@ def expense_chart(request: HttpRequest) -> HttpResponse:
     graphic = graphic.decode('utf-8')
 
     return render(request, 'expenses/expense_chart.html', {'graphic': graphic})
+
+
+
+@login_required
+def add_expense(request: HttpRequest) -> HttpResponse:
+    """Handle the addition of a new expense."""
+    if request.method == 'POST':
+        form = ExpenseForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('expense_list')
+    else:
+        form = ExpenseForm()
+    return render(request, 'expenses/add_expense.html', {'form': form})

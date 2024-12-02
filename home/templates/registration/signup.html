@@ -27,14 +27,8 @@
             margin-bottom: 20px;
             text-align: center;
         }
-        .signup-link {
-            margin-top: 10px;
-            display: block;
-            text-align: center;
-            color: #007bff;
-        }
-        .signup-link:hover {
-            text-decoration: underline;
+        .text-danger {
+            color: #dc3545;
         }
     </style>
 </head>
@@ -46,18 +40,46 @@
             <div class="form-group">
                 <label for="username">Логін</label>
                 <input type="text" name="username" class="form-control" id="username" required>
+                {% if form.username.errors %}
+                    <div class="text-danger">
+                        {% for error in form.username.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" name="email" class="form-control" id="email" required>
+                {% if form.email.errors %}
+                    <div class="text-danger">
+                        {% for error in form.email.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
             <div class="form-group">
                 <label for="password1">Пароль</label>
                 <input type="password" name="password1" class="form-control" id="password1" required>
+                {% if form.password1.errors %}
+                    <div class="text-danger">
+                        {% for error in form.password1.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
             <div class="form-group">
                 <label for="password2">Підтвердіть пароль</label>
                 <input type="password" name="password2" class="form-control" id="password2" required>
+                {% if form.password2.errors %}
+                    <div class="text-danger">
+                        {% for error in form.password2.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
             <button type="submit" class="btn btn-primary btn-block">Зареєструватися</button>
         </form>

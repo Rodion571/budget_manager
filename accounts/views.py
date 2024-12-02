@@ -97,7 +97,7 @@ class CustomLoginView(auth_views.LoginView):
     Attributes:
         template_name (str): The template to use for rendering the login page.
     """
-    template_name: str = 'accounts/login.html'
+    template_name = 'accounts/login.html'
 
 def set_language(request: HttpRequest) -> HttpResponseRedirect:
     """

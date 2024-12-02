@@ -5,6 +5,7 @@
     <form method="get" action="{% url 'income_chart' %}" class="form-inline justify-content-center">
         <label for="month" class="mr-2" style="font-size: 18px;">Виберіть місяць:</label>
         <select id="month" name="month" class="form-control mr-2" required>
+            <option value="">-- Оберіть місяць --</option>
             <option value="2024-01">Січень</option>
             <option value="2024-02">Лютий</option>
             <option value="2024-03">Березень</option>
@@ -20,10 +21,17 @@
         </select>
         <button type="submit" class="btn btn-primary">Показати</button>
     </form>
+    {% if form.month.errors %}
+        <div class="text-danger mt-2" style="text-align: center;">
+            {% for error in form.month.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <h3 style="color: #2c3e50; text-align: center; margin-top: 20px;">{{ month_name }}</h3>
 
-    <!-- Информация о доходах -->
+    <!-- Інформація про доходи -->
     <div class="table-responsive mt-4">
         <table class="table table-bordered">
             <thead>
@@ -47,7 +55,6 @@
         </table>
     </div>
 
-    <!-- График доходов -->
     <div style="text-align: center; margin-top: 20px;">
         <img src="data:image/png;base64,{{ graphic }}" alt="Графік доходів" style="max-width: 100%; height: auto; border: 2px solid #d2b48c; border-radius: 10px;">
     </div>

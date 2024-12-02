@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, get_user_model
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-
+from django.core.exceptions import ValidationError
 from expenses.models import Expense
 from incomes.models import Income
 from .models import Budget
@@ -60,6 +60,7 @@ def delete_income(request: HttpRequest, id: int) -> HttpResponseRedirect:
     income = get_object_or_404(Income, id=id)
     income.delete()
     return redirect('income_list')
+from django.core.exceptions import ValidationError
 
 @login_required
 def add_expense(request: HttpRequest) -> HttpResponse:
@@ -69,6 +70,10 @@ def add_expense(request: HttpRequest) -> HttpResponse:
         category = request.POST['category']
         amount = request.POST['amount']
         date = request.POST['date']
+
+        if not name or not category or not amount or not date:
+            raise ValidationError("All fields are required.")
+
         Expense.objects.create(name=name, category=category, amount=amount, date=date)
         return redirect('expense_list')
     return render(request, 'add_expense.html')
@@ -81,9 +86,14 @@ def add_income(request: HttpRequest) -> HttpResponse:
         category = request.POST['category']
         amount = request.POST['amount']
         date = request.POST['date']
+
+        if not name or not category or not amount or not date:
+            raise ValidationError("All fields are required.")
+
         Income.objects.create(name=name, category=category, amount=amount, date=date)
         return redirect('income_list')
     return render(request, 'incomes/add_income.html')
+
 
 @login_required
 def budget_planning(request: HttpRequest) -> HttpResponse:

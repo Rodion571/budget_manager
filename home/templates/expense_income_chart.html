@@ -8,9 +8,24 @@
             <option value="expenses" {% if type == 'expenses' %}selected{% endif %}>Витрати</option>
             <option value="income" {% if type == 'income' %}selected{% endif %}>Доходи</option>
         </select>
-        
+        {% if form.type.errors %}
+            <div class="text-danger mt-2">
+                {% for error in form.type.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
         <label for="month" class="mr-2" style="font-size: 18px;">Виберіть місяць:</label>
         <input type="month" id="month" name="month" class="form-control mr-2" value="{{ month }}" required>
+        {% if form.month.errors %}
+            <div class="text-danger mt-2">
+                {% for error in form.month.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
         <button type="submit" class="btn btn-primary">Показати</button>
     </form>
 
