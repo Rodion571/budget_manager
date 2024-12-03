@@ -42,17 +42,19 @@ def profile(request: HttpRequest) -> HttpResponse:
     return render(request, 'profile.html')
 
 @login_required
-def income_list(request: HttpRequest) -> HttpResponse:
-    """Render the income list and handle new income creation."""
-    if request.method == 'POST' and 'source' in request.POST:
-        name = request.POST['name']
-        source = request.POST['source']
-        amount = request.POST['amount']
-        date = request.POST['date']
-        Income.objects.create(name=name, source=source, amount=amount, date=date)
-        return redirect('income_list')
-    incomes = Income.objects.all()
-    return render(request, 'income_list.html', {'incomes': incomes})
+def income_list(request):
+    if request.method == 'POST':
+        form = IncomeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('income_list')
+        else:
+            return render(request, 'income_list.html', {'form': form, 'incomes': Income.objects.all()})
+    else:
+        form = IncomeForm()
+
+    return render(request, 'income_list.html', {'form': form, 'incomes': Income.objects.all()})
+
 
 @login_required
 def delete_income(request: HttpRequest, id: int) -> HttpResponseRedirect:
