@@ -1,11 +1,16 @@
 from django import forms
-from .models import Expense, Income
 from decimal import Decimal, InvalidOperation
+from .models import Expense, Income
+
 
 class ExpenseForm(forms.ModelForm):
+    """
+    Form for creating and updating Expense instances.
+    """
+
     class Meta:
         model = Expense
-        fields = ['name', 'category', 'amount', 'date']
+        fields = ['name', 'source', 'amount', 'date']
 
     def clean_amount(self) -> Decimal:
         """
@@ -31,28 +36,12 @@ class ExpenseForm(forms.ModelForm):
 
         return amount
 
-    def clean(self) -> dict:
-        """
-        Validate all fields.
-
-        Returns:
-            dict: The cleaned data.
-
-        Raises:
-            forms.ValidationError: If any field is invalid.
-        """
-        cleaned_data = super().clean()
-        name = cleaned_data.get('name')
-        category = cleaned_data.get('category')
-        amount = cleaned_data.get('amount')
-        date = cleaned_data.get('date')
-
-        if not name or not category or not amount or not date:
-            raise forms.ValidationError("Всі поля є обов'язковими для заповнення.")
-
-        return cleaned_data
 
 class IncomeForm(forms.ModelForm):
+    """
+    Form for creating and updating Income instances.
+    """
+
     class Meta:
         model = Income
         fields = ['name', 'source', 'amount', 'date']

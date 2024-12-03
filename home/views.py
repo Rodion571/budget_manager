@@ -17,7 +17,7 @@ from expenses.models import Expense
 from incomes.models import Income
 from .models import Budget
 from incomes.forms import IncomeForm
-
+from .forms import ExpenseForm
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
@@ -62,11 +62,9 @@ def delete_income(request: HttpRequest, id: int) -> HttpResponseRedirect:
     income = get_object_or_404(Income, id=id)
     income.delete()
     return redirect('income_list')
-from django.core.exceptions import ValidationError
-
 @login_required
 def add_expense(request: HttpRequest) -> HttpResponse:
-    """Handle the addition of a new expense."""
+    """Handle the addition of a new income."""
     if request.method == 'POST':
         name = request.POST['name']
         category = request.POST['category']
@@ -74,11 +72,11 @@ def add_expense(request: HttpRequest) -> HttpResponse:
         date = request.POST['date']
 
         if not name or not category or not amount or not date:
-            raise ValidationError("All fields are required.")
+            raise ValidationError("Всі поля обов'язкові для заповнення.")
 
-        Expense.objects.create(name=name, category=category, amount=amount, date=date)
+        Income.objects.create(name=name, category=category, amount=amount, date=date)
         return redirect('expense_list')
-    return render(request, 'add_expense.html')
+    return render(request, 'expenses/add_expense.html')
 
 @login_required
 def add_income(request: HttpRequest) -> HttpResponse:
@@ -90,7 +88,7 @@ def add_income(request: HttpRequest) -> HttpResponse:
         date = request.POST['date']
 
         if not name or not category or not amount or not date:
-            raise ValidationError("All fields are required.")
+            raise ValidationError("Всі поля обов'язкові для заповнення.")
 
         Income.objects.create(name=name, category=category, amount=amount, date=date)
         return redirect('income_list')
@@ -130,18 +128,22 @@ def delete_budget(request: HttpRequest, id: int) -> HttpResponseRedirect:
     budget.delete()
     return redirect('budget_planning')
 
+
 @login_required
 def expense_list(request: HttpRequest) -> HttpResponse:
-    """Render the expense list and handle new expense creation."""
     if request.method == 'POST':
-        name = request.POST['name']
-        category = request.POST['category']
-        amount = request.POST['amount']
-        date = request.POST['date']
-        Expense.objects.create(name=name, category=category, amount=amount, date=date)
-        return redirect('expense_list')
+        form = ExpenseForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('expense_list')
+        else:
+            return render(request, 'expense_list.html', {'form': form, 'expenses': Expense.objects.all()})
+    else:
+        form = ExpenseForm()
+
     expenses = Expense.objects.all()
-    return render(request, 'expense_list.html', {'expenses': expenses})
+    return render(request, 'expense_list.html', {'form': form, 'expenses': expenses})
+
 
 @login_required
 def expense_chart(request: HttpRequest) -> HttpResponse:
