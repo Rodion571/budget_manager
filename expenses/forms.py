@@ -1,39 +1,57 @@
 from django import forms
-from expenses.models import Expense
-import datetime
+from .models import Expense
+from decimal import Decimal, InvalidOperation
 
 class ExpenseForm(forms.ModelForm):
     """
     Form for creating and updating Expense instances.
-
-    Attributes:
-        model (Type[Expense]): The model associated with the form.
-        fields (List[str]): The fields to include in the form.
     """
+
     class Meta:
         model = Expense
-        fields = ['name', 'amount', 'category', 'date']
+        fields = ['name', 'source', 'amount', 'date']
 
-    def clean_amount(self):
+    def clean_amount(self) -> Decimal:
         """
-        Validate that the amount is a positive number.
+        Validate the amount field.
+
+        Returns:
+            Decimal: The validated amount.
 
         Raises:
-            forms.ValidationError: If the amount is not positive.
+            forms.ValidationError: If the amount is invalid.
         """
         amount = self.cleaned_data.get('amount')
+        try:
+            amount = Decimal(str(amount).replace(',', '.'))
+        except InvalidOperation:
+            raise forms.ValidationError('Некоректне значення суми. Воно повинно бути числом з десятковою точкою.')
+
         if amount <= 0:
-            raise forms.ValidationError('Сума повинна бути позитивним числом.')
+            raise forms.ValidationError("Сума повинна бути більшою за нуль.")
+
+        if len(str(amount).replace('.', '').replace('-', '')) > 10:
+            raise forms.ValidationError("Сума не повинна перевищувати 10 символів.")
+
         return amount
 
-    def clean_date(self):
+    def clean(self) -> dict:
         """
-        Validate that the date is not in the future.
+        Validate all fields.
+
+        Returns:
+            dict: The cleaned data.
 
         Raises:
-            forms.ValidationError: If the date is in the future.
+            forms.ValidationError: If any field is invalid.
         """
-        date = self.cleaned_data.get('date')
-        if date > datetime.date.today():
-            raise forms.ValidationError('Дата не може бути в майбутньому.')
-        return date
+        cleaned_data = super().clean()
+        name = cleaned_data.get('name')
+        source = cleaned_data.get('source')
+        amount = cleaned_data.get('amount')
+        date = cleaned_data.get('date')
+
+        if not name or not source or not amount or not date:
+            raise forms.ValidationError("Всі поля є обов'язковими для заповнення.")
+
+        return cleaned_data

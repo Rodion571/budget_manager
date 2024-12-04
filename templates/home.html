@@ -141,7 +141,7 @@
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 links.forEach(link => link.classList.remove('active'));
-                link.classList.add('active');
+            link.classList.add('active');
                 const targetUrl = link.getAttribute('href');
                 history.pushState(null, '', targetUrl);
                 fetch(targetUrl)
@@ -150,7 +150,7 @@
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(html, 'text/html');
                         document.querySelector('#content').innerHTML = doc.querySelector('#content').innerHTML;
-                       
+                   
                         if (targetUrl === "{% url 'home_content' %}") {
                             history.replaceState(null, '', '/home_content');
                         }
@@ -166,15 +166,18 @@
                 }
             }
         });
-        
+    
         const monthSelect = document.getElementById('month');
-        const monthNames = ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'];
+        if (monthSelect) {
+            const monthNames = ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'];
 
-        for (let i = 0; i < monthSelect.options.length; i++) {
-            const option = monthSelect.options[i];
-            const monthValue = option.value.split('-')[1];
-            const yearValue = option.value.split('-')[0];
-            option.text = `${monthNames[parseInt(monthValue) - 1]} ${yearValue}`;
+            for (let i = 0; i < monthSelect.options.length; i++) {
+                const option = monthSelect.options[i];
+                const monthValue = option.value.split('-')[1];
+                const yearValue = option.value.split('-')[0];
+                option.text = `${monthNames[parseInt(monthValue) - 1]} ${yearValue}`;
+            }
         }
     });
+
 </script>

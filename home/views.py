@@ -30,9 +30,22 @@ def home_content(request: HttpRequest) -> HttpResponse:
     """Render the home content page."""
     return render(request, 'home_content.html')
 
+from django.shortcuts import redirect, get_object_or_404
+from .models import Expense
+from django.contrib.auth.decorators import login_required
+
 @login_required
-def delete_expense(request: HttpRequest, id: int) -> HttpResponseRedirect:
-    """Handle the deletion of an expense."""
+def delete_expense(request, id):
+    """
+    Handle deleting an expense.
+
+    Args:
+        request (HttpRequest): The HTTP request.
+        id (int): The ID of the expense to delete.
+
+    Returns:
+        HttpResponse: The HTTP response redirecting to the expense list page.
+    """
     expense = get_object_or_404(Expense, id=id)
     expense.delete()
     return redirect('expense_list')
@@ -62,9 +75,18 @@ def delete_income(request: HttpRequest, id: int) -> HttpResponseRedirect:
     income = get_object_or_404(Income, id=id)
     income.delete()
     return redirect('income_list')
+
 @login_required
 def add_expense(request: HttpRequest) -> HttpResponse:
-    """Handle the addition of a new income."""
+    """
+    Handle adding a new expense.
+
+    Args:
+        request (HttpRequest): The HTTP request.
+
+    Returns:
+        HttpResponse: The HTTP response with the rendered add expense page.
+    """
     if request.method == 'POST':
         name = request.POST['name']
         category = request.POST['category']
@@ -72,9 +94,9 @@ def add_expense(request: HttpRequest) -> HttpResponse:
         date = request.POST['date']
 
         if not name or not category or not amount or not date:
-            raise ValidationError("Всі поля обов'язкові для заповнення.")
+            raise ValidationError("All fields are required.")
 
-        Income.objects.create(name=name, category=category, amount=amount, date=date)
+        Expense.objects.create(name=name, source=category, amount=amount, date=date)
         return redirect('expense_list')
     return render(request, 'expenses/add_expense.html')
 
@@ -128,9 +150,17 @@ def delete_budget(request: HttpRequest, id: int) -> HttpResponseRedirect:
     budget.delete()
     return redirect('budget_planning')
 
-
 @login_required
 def expense_list(request: HttpRequest) -> HttpResponse:
+    """
+    Handle displaying and adding expenses.
+
+    Args:
+        request (HttpRequest): The HTTP request.
+
+    Returns:
+        HttpResponse: The HTTP response with the rendered expense list page.
+    """
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
         if form.is_valid():
@@ -143,7 +173,6 @@ def expense_list(request: HttpRequest) -> HttpResponse:
 
     expenses = Expense.objects.all()
     return render(request, 'expense_list.html', {'form': form, 'expenses': expenses})
-
 
 @login_required
 def expense_chart(request: HttpRequest) -> HttpResponse:

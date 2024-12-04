@@ -8,6 +8,6 @@ class ExpenseAdmin(admin.ModelAdmin):
     Attributes:
         list_display (tuple): Fields to display in the admin list view.
     """
-    list_display: tuple = ('name', 'amount', 'date', 'category')
+    list_display: tuple = ('name', 'amount', 'date', 'source')
 
 admin.site.register(Expense, ExpenseAdmin)

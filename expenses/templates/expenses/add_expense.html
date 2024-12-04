@@ -23,11 +23,11 @@
                 {% endif %}
             </div>
             <div class="form-group">
-                <label for="category">Категорія</label>
-                {{ form.category }}
-                {% if form.category.errors %}
+                <label for="source">Джерело</label>
+                {{ form.source }}
+                {% if form.source.errors %}
                     <div class="text-danger">
-                        {% for error in form.category.errors %}
+                        {% for error in form.source.errors %}
                             {{ error }}
                         {% endfor %}
                     </div>

@@ -3,11 +3,10 @@ import io
 import base64
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
-
-from expenses.models import Expense
+from django.core.exceptions import ValidationError
 from incomes.models import Income
-
+from django.contrib.auth.decorators import login_required
+from .models import Expense
 from expenses.forms import ExpenseForm
 from incomes.forms import IncomeForm
 
@@ -27,38 +26,28 @@ def home(request: HttpRequest) -> HttpResponse:
     return render(request, 'home.html', {'expenses': expenses, 'incomes': incomes})
 
 @login_required
-def add_expense(request: HttpRequest) -> HttpResponse:
+def expense_list(request: HttpRequest) -> HttpResponse:
     """
-    Handle the addition of a new expense.
+    Handle displaying and adding expenses.
 
     Args:
-        request (HttpRequest): The HTTP request object.
+        request (HttpRequest): The HTTP request.
 
     Returns:
-        HttpResponse: The HTTP response object with the rendered add expense page.
+        HttpResponse: The HTTP response with the rendered expense list page.
     """
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('expenses:expense_list')
+            return redirect('expense_list')
+        else:
+            return render(request, 'expense_list.html', {'form': form, 'expenses': Expense.objects.all()})
     else:
         form = ExpenseForm()
-    return render(request, 'add_expense.html', {'form': form})
 
-@login_required
-def expense_list(request: HttpRequest) -> HttpResponse:
-    """
-    Render the expense list page.
-
-    Args:
-        request (HttpRequest): The HTTP request object.
-
-    Returns:
-        HttpResponse: The HTTP response object with the rendered expense list page.
-    """
     expenses = Expense.objects.all()
-    return render(request, 'expense_list.html', {'expenses': expenses})
+    return render(request, 'expense_list.html', {'form': form, 'expenses': expenses})
 
 @login_required
 def delete_expense(request: HttpRequest, expense_id: int) -> HttpResponseRedirect:
@@ -129,14 +118,27 @@ def expense_chart(request: HttpRequest) -> HttpResponse:
 
 
 
+
 @login_required
 def add_expense(request: HttpRequest) -> HttpResponse:
-    """Handle the addition of a new expense."""
+    """
+    Handle adding a new expense.
+
+    Args:
+        request (HttpRequest): The HTTP request.
+
+    Returns:
+        HttpResponse: The HTTP response with the rendered add expense page.
+    """
     if request.method == 'POST':
-        form = ExpenseForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('expense_list')
-    else:
-        form = ExpenseForm()
-    return render(request, 'expenses/add_expense.html', {'form': form})
+        name = request.POST['name']
+        category = request.POST['category']
+        amount = request.POST['amount']
+        date = request.POST['date']
+
+        if not name or not category or not amount or not date:
+            raise ValidationError("All fields are required.")
+
+        Expense.objects.create(name=name, source=category, amount=amount, date=date)
+        return redirect('expense_list')
+    return render(request, 'expenses/add_expense.html')
