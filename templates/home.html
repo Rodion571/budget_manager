@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'styles.css' %}" rel="stylesheet">
-    <title>{% trans "Домашня бухгалтерія: облік розходу та доходу, планування бюджету" %}</title>
+    {% block head %}{% endblock %}
 </head>
 <body>
     <div class="top-right-corner">
@@ -55,41 +55,7 @@
             </div>
             <div class="flex-column flex-column--main">
                 <div id="content">
-                    {% block content %}
-                        <form method="post">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <label for="name">{% trans "Ім'я" %}</label>
-                                <input type="text" class="form-control" id="name" name="name">
-                                {% if form.name.errors %}
-                                    <div class="text-danger">
-                                        {% for error in form.name.errors %}
-                                            {{ error }}
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <div class="form-group">
-                                <label for="amount">{% trans "Сума" %}</label>
-                                <input type="text" class="form-control" id="amount" name="amount">
-                                {% if form.amount.errors %}
-                                    <div class="text-danger">
-                                        {% for error in form.amount.errors %}
-                                            {{ error }}
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <button type="submit" class="btn btn-primary">{% trans "Підтвердити" %}</button>
-                        </form>
-                        {% if form.non_field_errors %}
-                            <div class="alert alert-danger mt-3">
-                                {% for error in form.non_field_errors %}
-                                    {{ error }}
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    {% endblock %}
+                    {% block content %}{% endblock %}
                 </div>
             </div>
         </div>
@@ -141,7 +107,7 @@
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 links.forEach(link => link.classList.remove('active'));
-            link.classList.add('active');
+                link.classList.add('active');
                 const targetUrl = link.getAttribute('href');
                 history.pushState(null, '', targetUrl);
                 fetch(targetUrl)
@@ -150,7 +116,7 @@
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(html, 'text/html');
                         document.querySelector('#content').innerHTML = doc.querySelector('#content').innerHTML;
-                   
+
                         if (targetUrl === "{% url 'home_content' %}") {
                             history.replaceState(null, '', '/home_content');
                         }
@@ -166,7 +132,7 @@
                 }
             }
         });
-    
+
         const monthSelect = document.getElementById('month');
         if (monthSelect) {
             const monthNames = ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'];
@@ -179,5 +145,4 @@
             }
         }
     });
-
 </script>

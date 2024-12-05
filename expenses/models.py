@@ -12,12 +12,12 @@ class Expense(models.Model):
         amount (Decimal): The amount of the expense.
         date (datetime.date): The date the expense was made.
     """
-    name: models.CharField = models.CharField(max_length=100)
-    source: models.CharField = models.CharField(max_length=100)
-    amount: models.DecimalField = models.DecimalField(max_digits=10, decimal_places=2)
-    date: models.DateField = models.DateField()
+    name = models.CharField(max_length=100)
+    source = models.CharField(max_length=100)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    date = models.DateField()
 
-    def clean(self) -> None:
+    def clean(self):
         """
         Validate the amount field.
 
@@ -27,7 +27,9 @@ class Expense(models.Model):
         try:
             self.amount = Decimal(str(self.amount).replace(',', '.'))
         except InvalidOperation:
-            raise ValidationError('Некоректне значення суми. Воно повинно бути числом з десятковою точкою.')
+            raise ValidationError(
+                'Некоректне значення суми. Воно повинно бути числом з десятковою точкою.'
+            )
 
         if self.amount <= 0:
             raise ValidationError('Сума повинна бути більшою за нуль.')
@@ -35,7 +37,7 @@ class Expense(models.Model):
         if len(str(self.amount).replace('.', '').replace('-', '')) > 10:
             raise ValidationError("Сума не повинна перевищувати 10 символів.")
 
-    def __str__(self) -> str:
+    def __str__(self):
         """
         Return a string representation of the expense.
 

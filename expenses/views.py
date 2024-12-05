@@ -1,11 +1,11 @@
-import matplotlib.pyplot as plt
 import io
 import base64
+import matplotlib.pyplot as plt
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.core.exceptions import ValidationError
-from incomes.models import Income
 from django.contrib.auth.decorators import login_required
+from incomes.models import Income
 from .models import Expense
 from expenses.forms import ExpenseForm
 from incomes.forms import IncomeForm
@@ -41,8 +41,6 @@ def expense_list(request: HttpRequest) -> HttpResponse:
         if form.is_valid():
             form.save()
             return redirect('expense_list')
-        else:
-            return render(request, 'expense_list.html', {'form': form, 'expenses': Expense.objects.all()})
     else:
         form = ExpenseForm()
 
@@ -88,7 +86,7 @@ def add_income(request: HttpRequest) -> HttpResponse:
 @login_required
 def expense_chart(request: HttpRequest) -> HttpResponse:
     """
-    Render a bar chart of expenses by category.
+    Render a bar chart of expenses by name (or other available field).
 
     Args:
         request (HttpRequest): The HTTP request object.
@@ -97,27 +95,23 @@ def expense_chart(request: HttpRequest) -> HttpResponse:
         HttpResponse: The HTTP response object with the rendered expense chart page.
     """
     expenses = Expense.objects.all()
-    categories = [expense.category for expense in expenses]
+    names = [expense.name for expense in expenses]
     amounts = [expense.amount for expense in expenses]
 
     plt.figure(figsize=(10, 5))
-    plt.bar(categories, amounts, color='blue')
-    plt.xlabel('Категорії')
-    plt.ylabel('Сума')
-    plt.title('Розподіл витрат за категоріями')
+    plt.bar(names, amounts, color='blue')
+    plt.xlabel('Имена')
+    plt.ylabel('Сумма')
+    plt.title('Розподіл витрат за іменами')
 
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
     image_png = buffer.getvalue()
     buffer.close()
-    graphic = base64.b64encode(image_png)
-    graphic = graphic.decode('utf-8')
+    graphic = base64.b64encode(image_png).decode('utf-8')
 
     return render(request, 'expenses/expense_chart.html', {'graphic': graphic})
-
-
-
 
 @login_required
 def add_expense(request: HttpRequest) -> HttpResponse:
@@ -132,13 +126,20 @@ def add_expense(request: HttpRequest) -> HttpResponse:
     """
     if request.method == 'POST':
         name = request.POST['name']
-        category = request.POST['category']
+        source = request.POST['source']
         amount = request.POST['amount']
         date = request.POST['date']
 
-        if not name or not category or not amount or not date:
+        if not name or not source or not amount or not date:
             raise ValidationError("All fields are required.")
 
-        Expense.objects.create(name=name, source=category, amount=amount, date=date)
+        Expense.objects.create(name=name, source=source, amount=amount, date=date)
         return redirect('expense_list')
     return render(request, 'expenses/add_expense.html')
+
+
+
+@login_required
+def home_content_view(request):
+    expenses = Expense.objects.all()
+    return render(request, 'home_content.html', {'expenses': expenses})

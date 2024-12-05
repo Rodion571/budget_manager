@@ -1,9 +1,63 @@
 {% extends "home.html" %}
 {% load static %}
 {% load i18n %}
+
+{% block head %}
+    <title>{% trans "Домашня бухгалтерія: облік розходу та доходу, планування бюджету" %}</title>
+    <style>
+        body {
+            background-color: #f0f8ff; /* Яскравіший фон */
+        }
+        a {
+            color: #1e90ff; /* Блакитний колір */
+            text-decoration: underline; /* Підкреслення */
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
-    <h1 class="text-center">{% trans "Домашня бухгалтерія: облік розходу та доходу, планування бюджета" %}</h1>
+    <h1 class="text-center" style="color: black;">{% trans "Домашня бухгалтерія: облік розходу та доходу, планування бюджету" %}</h1>
     <div class="text-center mb-4">
-        <img src="{% static 'images/new_image.jpg' %}" class="img-fluid" alt="{% trans "Головне Зображення" %}">
+        <img src="{% static 'images/new_image.jpg' %}" class="img-fluid" alt="{% trans "Унікальне Зображення" %}">
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header" style="color: black;">{% trans "Останні новини" %}</div>
+                <div class="card-body" style="color: black;">
+                    <p>{% trans "Будьте в курсі останніх подій та оновлень у світі фінансів!" %}</p>
+                    <ul>
+                        <li><a href="https://finbalance.com.ua/news/recent-news" target="_blank">{% trans "Фінансова стабільність в Україні: останні події" %}</a><br/><small>{% trans "Дізнайтеся про останні економічні зміни в Україні та їх вплив на фінансову стабільність." %}</small></li>
+                        <li><a href="https://minfin.com.ua/news" target="_blank">{% trans "Ринок акцій: аналіз та прогнози" %}</a><br/><small>{% trans "Огляди та прогнози від експертів щодо розвитку ринку акцій." %}</small></li>
+                        <li><a href="https://finance.ua/ua/news" target="_blank">{% trans "Найактуальніші фінансові новини та тенденції" %}</a><br/><small>{% trans "Свіжі новини та аналітика зі світу фінансів." %}</small></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header" style="color: black;">{% trans "Популярні статті" %}</div>
+                <div class="card-body">
+                    <ul>
+                        <li><a href="https://www.epravda.com.ua/publications/" target="_blank">{% trans "Економічна правда" %}</a><br/><small>{% trans "Аналітичні статті та дослідження з економіки." %}</small></li>
+                        <li><a href="https://www.unian.ua/economics" target="_blank">{% trans "УНІАН Економіка" %}</a><br/><small>{% trans "Статті про економічні події в Україні та світі." %}</small></li>
+                        <li><a href="https://biz.censor.net/" target="_blank">{% trans "Цензор.НЕТ Бізнес" %}</a><br/><small>{% trans "Аналітика та статті на фінансові та бізнес-теми." %}</small></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header" style="color: black;">{% trans "Рекомендації" %}</div>
+                <div class="card-body" style="color: black;">
+                    <p>{% trans "Отримуйте персональні рекомендації та поради від наших фінансових експертів! Підпишіться на нашу розсилку, щоб бути в курсі найкращих практик у сфері управління фінансами, інвестицій та заощаджень." %}</p>
+                    <ul>
+                        <li><a href="https://www.abc-amega.com/webinar-archive/" target="_blank">{% trans "Реєстрація на вебінар з управління фінансами" %}</a><br/><small>{% trans "Отримайте практичні поради з управління фінансами від провідних експертів." %}</small></li>
+                        <li><a href="https://www.investopedia.com/articles/investing/102915/beginners-guide-effective-investing.asp" target="_blank">{% trans "Персональні поради для ефективного інвестування" %}</a><br/><small>{% trans "Дізнайтеся про найкращі методи інвестування та отримайте персональні рекомендації." %}</small></li>
+                        <li><a href="https://www.nerdwallet.com/article/finance/how-to-create-a-budget" target="_blank">{% trans "Як скласти персональний бюджет" %}</a><br/><small>{% trans "Навчіться складати ефективний бюджет для досягнення своїх фінансових цілей." %}</small></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

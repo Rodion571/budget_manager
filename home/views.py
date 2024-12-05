@@ -227,59 +227,6 @@ def financial_tips(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def expense_chart(request: HttpRequest) -> HttpResponse:
-    """
-    Render a bar chart of expenses by category for a selected month.
-
-    Args:
-        request (HttpRequest): The HTTP request object.
-
-    Returns:
-        HttpResponse: The HTTP response object with the rendered expense chart page.
-    """
-    if 'month' in request.GET:
-        selected_month = request.GET['month']
-    else:
-        selected_month = datetime.datetime.now().strftime('%Y-%m')
-
-    year, month = map(int, selected_month.split('-'))
-    expenses = Expense.objects.filter(date__year=year, date__month=month)
-
-    unique_categories = set(expense.category for expense in expenses)
-    random.seed(42)
-    colors = random.sample(list(mcolors.CSS4_COLORS.values()), len(unique_categories))
-    category_color_map = {category: color for category, color in zip(unique_categories, colors)}
-
-    for expense in expenses:
-        expense.color = category_color_map[expense.category]
-
-    category_totals = expenses.values('category').annotate(total=Sum('amount')).order_by('category')
-    plt.figure(figsize=(10, 5))
-    plt.bar([item['category'] for item in category_totals], [item['total'] for item in category_totals],
-            color=[category_color_map[item['category']] for item in category_totals])
-    plt.xlabel('Категорії', fontsize=14, fontweight='bold')
-    plt.ylabel('Сума', fontsize=14, fontweight='bold')
-    plt.title('Розподіл витрат по категоріях', fontsize=16, fontweight='bold')
-    plt.xticks(rotation=45)
-    plt.grid(True, linestyle='--', alpha=0.7)
-
-    buffer = io.BytesIO()
-    plt.savefig(buffer, format='png')
-    buffer.seek(0)
-    image_png = buffer.getvalue()
-    buffer.close()
-    graphic = base64.b64encode(image_png).decode('utf-8')
-
-    ukr_months = {
-        1: "Січень", 2: "Лютий", 3: "Березень", 4: "Квітень",
-        5: "Травень", 6: "Червень", 7: "Липень", 8: "Серпень",
-        9: "Вересень", 10: "Жовтень", 11: "Листопад", 12: "Грудень"
-    }
-    month_name = f"{ukr_months[month]} {year}"
-
-    return render(request, 'expense_chart.html', {'expenses': expenses, 'month': selected_month, 'month_name': month_name, 'graphic': graphic})
-
-@login_required
 def income_chart(request: HttpRequest) -> HttpResponse:
     """
     Render a bar chart of incomes by source for a selected month.
