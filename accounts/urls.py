@@ -1,16 +1,13 @@
 from django.urls import path
-from .views import register, user_login, user_logout, home, set_language
-from django.contrib import admin
-from django.http import HttpResponse
-from typing import List
+from . import views
 
 app_name = 'accounts'
 
-urlpatterns: List[path] = [
-    path('register/', register, name='register'),
-    path('login/', user_login, name='login'),
-    path('logout/', user_logout, name='logout'),
-    path('home/', home, name='home_content'),
-    path('admin/', admin.site.urls),
-    path('set_language/', set_language, name='set_language'),
+urlpatterns = [
+    path('register/', views.register, name='register'),
+    path('login/', views.user_login, name='login'),
+    path('logout/', views.user_logout, name='logout'),
+    path('home/', views.home, name='home_content'),
+    path('set_language/', views.set_language, name='set_language'),
+    path('signup/', views.register, name='signup'),
 ]

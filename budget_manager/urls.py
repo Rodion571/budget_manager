@@ -1,56 +1,53 @@
-"""
-URL configuration for budget_manager project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-
 from django.contrib import admin
 from django.urls import path, include
-from home import views
+from home import views as home_views
+from accounts import views as accounts_views
+from expenses import views as expenses_views
+from incomes import views as incomes_views
+from new_app import views as new_app_views
+from translations import views as translations_views
 from django.conf.urls.i18n import set_language
-from typing import List
 
-urlpatterns: List[path] = [
-    # base URL
-    path('', views.home_content, name='home_content'),
-    path('home/', views.home, name='home'),
-    path('income-list/', views.income_list, name='income_list'),
-    path('expense-list/', views.expense_list, name='expense_list'),
-    path('expense-chart/', views.expense_chart, name='expense_chart'),
-    path('expense-income-chart/', views.expense_income_chart, name='expense_income_chart'),
-    path('budget-planning/', views.budget_planning, name='budget_planning'),
-    path('add-budget/', views.budget_planning, name='add_budget'),
-    path('financial-tips/', views.financial_tips, name='financial_tips'),
-    path('add-expense/', views.add_expense, name='add_expense'),
-    path('profile/', views.profile, name='profile'),
-    path('delete-income/<int:id>/', views.delete_income, name='delete_income'),
-    path('delete-expense/<int:id>/', views.delete_expense, name='delete_expense'),
-    path('income-chart/', views.income_chart, name='income_chart'),
-    path('signup/', views.signup, name='signup'),
-    path('delete-budget/<int:id>/', views.delete_budget, name='delete_budget'),
+urlpatterns = [
+    # URLs для home
+    path('', home_views.home_content, name='home_content'),
+    path('home/', home_views.home, name='home'),
+    path('income-list/', home_views.income_list, name='income_list'),
+    path('expense-list/', expenses_views.expense_list, name='expense_list'),
+    path('expense-chart/', expenses_views.expense_chart, name='expense_chart'),
+    path('expense-income-chart/', home_views.expense_income_chart, name='expense_income_chart'),
+    path('budget-planning/', home_views.budget_planning, name='budget_planning'),
+    path('add-budget/', home_views.budget_planning, name='add_budget'),
+    path('financial-tips/', home_views.financial_tips, name='financial_tips'),
+    path('add-expense/', expenses_views.add_expense, name='add_expense'),
+    path('profile/', home_views.profile, name='profile'),
+    path('delete-income/<int:id>/', home_views.delete_income, name='delete_income'),
+    path('delete-expense/<int:id>/', expenses_views.delete_expense, name='delete_expense'),
+    path('income-chart/', home_views.income_chart, name='income_chart'),
+    path('signup/', home_views.signup, name='signup'),
+    path('delete-budget/<int:id>/', home_views.delete_budget, name='delete_budget'),
 
-    # more URL
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('accounts/', include(('accounts.urls', 'accounts'), namespace='accounts')),
-    path('home/', include(('home.urls', 'home'), namespace='home')),
-    path('home_content/', views.home_content, name='home_content'),
-    path('new_app/', include(('new_app.urls', 'new_app'), namespace='new_app')),
-    path('expenses/', include(('expenses.urls', 'expenses'), namespace='expenses')),
-    path('incomes/', include(('incomes.urls', 'incomes'), namespace='incomes')),
-    path('translations/', include('translations.urls')),
-    path('i18n/setlang/', set_language, name='set_language'),
+    # URLs для accounts
+    path('accounts/', include(('accounts.urls', 'accounts'), namespace='accounts')),  # Добавлено пространство имен и include
 
-    # admin
+    # URLs для expenses
+    path('expenses/add/', expenses_views.add_expense, name='add_expense'),
+    path('expenses/chart/', expenses_views.expense_chart, name='expense_chart'),
+    path('expenses/delete/<int:expense_id>/', expenses_views.delete_expense, name='delete_expense'),
+    path('expenses/list/', expenses_views.expense_list, name='expense_list'),
+    path('expenses/home_content/', expenses_views.home_content_view, name='home_content'),
+
+    # URLs для incomes
+    path('incomes/add/', incomes_views.add_income, name='add_income'),
+    path('incomes/list/', incomes_views.income_list, name='income_list'),
+
+    # URLs для new_app
+    path('new_app/', new_app_views.index, name='index'),
+
+    # URLs для translations
+    path('translations/set-language/', translations_views.set_language, name='set_language'),
+
+    # Admin URL
     path('admin/', admin.site.urls),
+    path('i18n/setlang/', set_language, name='set_language'),
 ]

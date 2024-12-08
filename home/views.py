@@ -30,10 +30,6 @@ def home_content(request: HttpRequest) -> HttpResponse:
     """Render the home content page."""
     return render(request, 'home_content.html')
 
-from django.shortcuts import redirect, get_object_or_404
-from .models import Expense
-from django.contrib.auth.decorators import login_required
-
 @login_required
 def delete_expense(request, id):
     """
@@ -176,7 +172,7 @@ def expense_list(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def expense_chart(request: HttpRequest) -> HttpResponse:
-    """Render a bar chart of expenses by category for a selected month."""
+    """Render a bar chart of expenses by source for a selected month."""
     if 'month' in request.GET:
         selected_month = request.GET['month']
     else:
@@ -185,26 +181,27 @@ def expense_chart(request: HttpRequest) -> HttpResponse:
     year, month = map(int, selected_month.split('-'))
     expenses = Expense.objects.filter(date__year=year, date__month=month)
 
-    unique_categories = set(expense.category for expense in expenses)
+    unique_sources = set(expense.source for expense in expenses)
     random.seed(42)
-    colors = random.sample(list(mcolors.CSS4_COLORS.values()), len(unique_categories))
-    category_color_map = {category: color for category, color in zip(unique_categories, colors)}
+    colors = random.sample(list(mcolors.CSS4_COLORS.values()), len(unique_sources))
+    source_color_map = {source: color for source, color in zip(unique_sources, colors)}
 
     for expense in expenses:
-        expense.color = category_color_map[expense.category]
+        expense.color = source_color_map[expense.source]
 
-    category_totals = expenses.values('category').annotate(total=Sum('amount')).order_by('category')
+    source_totals = expenses.values('source').annotate(total=Sum('amount')).order_by('source')
     plt.figure(figsize=(10, 5))
-    plt.bar([item['category'] for item in category_totals], [item['total'] for item in category_totals],
-            color=[category_color_map[item['category']] for item in category_totals])
-    plt.xlabel('Категорії', fontsize=14, fontweight='bold')
+    plt.bar([item['source'] for item in source_totals], [item['total'] for item in source_totals],
+            color=[source_color_map[item['source']] for item in source_totals])
+    plt.xlabel('Джерела', fontsize=14, fontweight='bold')
     plt.ylabel('Сума', fontsize=14, fontweight='bold')
-    plt.title('Розподіл витрат по категоріях', fontsize=16, fontweight='bold')
+    plt.title('Розподіл витрат по джерелах', fontsize=16, fontweight='bold')
     plt.xticks(rotation=45)
     plt.grid(True, linestyle='--', alpha=0.7)
 
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png')
+    plt.close()
     buffer.seek(0)
     image_png = buffer.getvalue()
     buffer.close()

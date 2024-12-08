@@ -11,20 +11,20 @@
     {% block head %}{% endblock %}
 </head>
 <body>
-    <div class="top-right-corner">
-        {% if user.is_authenticated %}
-            <div class="auth-buttons">
-                <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="auth-button auth-button-logout">{% trans "Вийти" %}</button>
-                </form>
-            </div>
-        {% else %}
-            <div class="auth-buttons">
-                <a href="{% url 'login' %}" class="auth-button auth-button-login">{% trans "Увійти" %}</a>
-                <a href="{% url 'signup' %}" class="auth-button auth-button-signup">{% trans "Реєстрація" %}</a>
-            </div>
-        {% endif %}
+    <div class="top-right-corner"> 
+        {% if user.is_authenticated %} 
+            <div class="auth-buttons"> 
+                <form method="post" action="{% url 'accounts:logout' %}"> 
+                    {% csrf_token %} 
+                    <button type="submit" class="auth-button auth-button-logout">{% trans "Вийти" %}</button> 
+                </form> 
+            </div> 
+        {% else %} 
+            <div class="auth-buttons"> 
+                <a href="{% url 'accounts:login' %}" class="auth-button auth-button-login">{% trans "Увійти" %}</a> 
+                <a href="{% url 'accounts:register' %}" class="auth-button auth-button-signup">{% trans "Реєстрація" %}</a> 
+            </div> 
+        {% endif %} 
     </div>
     <div class="container-fluid">
         <div class="flex-container">
