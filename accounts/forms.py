@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import get_user_model
+
 from datetime import datetime
+
 
 class UserRegisterForm(UserCreationForm):
     """
@@ -9,7 +11,6 @@ class UserRegisterForm(UserCreationForm):
 
     Attributes:
         email (forms.EmailField): The email field for the registration form.
-        date_of_birth (forms.DateField): The date of birth field for the registration form.
     """
     email = forms.EmailField(required=True)
 
@@ -22,9 +23,9 @@ class UserRegisterForm(UserCreationForm):
             fields: The fields to include in the form.
         """
         model = get_user_model()
-        fields = ['username', 'email', 'password1', 'password2',]
+        fields = ['username', 'email', 'password1', 'password2']
 
-    def clean_email(self):
+    def clean_email(self) -> str:
         """
         Validate that the provided email is unique.
 
@@ -38,7 +39,6 @@ class UserRegisterForm(UserCreationForm):
         if get_user_model().objects.filter(email=email).exists():
             raise forms.ValidationError('Електронна пошта вже використовується.')
         return email
-
 
 class UserLoginForm(AuthenticationForm):
     """

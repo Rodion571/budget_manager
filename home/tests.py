@@ -2,10 +2,9 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
-from .models import Budget
+from home.models import Budget
 
 User = get_user_model()
-
 
 class HomeTests(TestCase):
     """
@@ -38,9 +37,9 @@ class HomeTests(TestCase):
             The response status code is 200.
             The correct template is used for the response.
         """
-        response: HttpResponse = self.client.get(reverse('home:home_content'))
+        response: HttpResponse = self.client.get(reverse('home_content'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'home.html')
+        self.assertTemplateUsed(response, 'home_content.html')
 
     def test_expense_list_view(self) -> None:
         """
@@ -52,7 +51,7 @@ class HomeTests(TestCase):
             The response status code is 200.
             The correct template is used for the response.
         """
-        response: HttpResponse = self.client.get(reverse('home:expense_list'))
+        response: HttpResponse = self.client.get(reverse('expense_list'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'expense_list.html')
 
@@ -66,9 +65,9 @@ class HomeTests(TestCase):
             The response status code is 200.
             The correct template is used for the response.
         """
-        response: HttpResponse = self.client.get(reverse('home:add_expense'))
+        response: HttpResponse = self.client.get(reverse('add_expense'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'add_expense.html')
+        self.assertTemplateUsed(response, 'expenses/add_expense.html')
 
     def test_add_income_view(self) -> None:
         """
@@ -80,7 +79,7 @@ class HomeTests(TestCase):
             The response status code is 200.
             The correct template is used for the response.
         """
-        response: HttpResponse = self.client.get(reverse('home:add_income'))
+        response: HttpResponse = self.client.get(reverse('add_income'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'incomes/add_income.html')
 
@@ -94,7 +93,7 @@ class HomeTests(TestCase):
             The response status code is 200.
             The correct template is used for the response.
         """
-        response: HttpResponse = self.client.get(reverse('home:budget_planning'))
+        response: HttpResponse = self.client.get(reverse('budget_planning'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'budget_planning.html')
 

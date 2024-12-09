@@ -24,7 +24,8 @@ urlpatterns = [
     path('income-chart/', home_views.income_chart, name='income_chart'),
     path('signup/', home_views.signup, name='signup'),
     path('delete-budget/<int:id>/', home_views.delete_budget, name='delete_budget'),
-
+    path('register/', accounts_views.register, name='register'),
+    path('login/', accounts_views.user_login, name='login'),
     # URLs для accounts
     path('accounts/', include(('accounts.urls', 'accounts'), namespace='accounts')),  # Добавлено пространство имен и include
 

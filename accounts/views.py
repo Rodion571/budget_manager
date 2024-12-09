@@ -9,6 +9,7 @@ from .forms import UserRegisterForm, UserLoginForm
 
 User = get_user_model()
 
+
 def register(request: HttpRequest) -> HttpResponse:
     """
     Handle user registration.
@@ -31,6 +32,9 @@ def register(request: HttpRequest) -> HttpResponse:
             if user is not None:
                 login(request, user)
                 return redirect(reverse('home_content'))
+        else:
+            print("Form is not valid:")
+            print(form.errors.as_data())
     else:
         form = UserRegisterForm()
     return render(request, 'accounts/register.html', {'form': form})

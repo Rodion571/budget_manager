@@ -47,7 +47,7 @@
                 <input type="text" name="username" class="form-control" id="id_username" required>
                 {% for error in form.username.errors %}
                     <div class="text-danger">
-                        {% trans error %}
+                        {{ error }}
                     </div>
                 {% endfor %}
             </div>
@@ -56,7 +56,7 @@
                 <input type="email" name="email" class="form-control" id="id_email" required>
                 {% for error in form.email.errors %}
                     <div class="text-danger">
-                        {% trans error %}
+                        {{ error }}
                     </div>
                 {% endfor %}
             </div>
@@ -65,7 +65,7 @@
                 <input type="password" name="password1" class="form-control" id="id_password1" required>
                 {% for error in form.password1.errors %}
                     <div class="text-danger">
-                        {% trans error %}
+                        {{ error }}
                     </div>
                 {% endfor %}
             </div>
@@ -74,7 +74,7 @@
                 <input type="password" name="password2" class="form-control" id="id_password2" required>
                 {% for error in form.password2.errors %}
                     <div class="text-danger">
-                        {% trans error %}
+                        {{ error }}
                     </div>
                 {% endfor %}
             </div>
@@ -83,12 +83,12 @@
         {% if form.non_field_errors %}
             <div class="alert alert-danger mt-3">
                 {% for error in form.non_field_errors %}
-                    {% trans error %}
+                    {{ error }}
                 {% endfor %}
             </div>
         {% endif %}
         <div class="text-center mt-3 auth-link">
-            <a href="{% url 'accounts:login' %}" class="btn btn-secondary">{% trans "Уже маєш акаунт? Увійди" %}</a>
+            <a href="{% url 'login' %}" class="btn btn-secondary">{% trans "Уже маєш акаунт? Увійди" %}</a>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

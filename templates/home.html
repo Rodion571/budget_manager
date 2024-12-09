@@ -89,53 +89,58 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-document.addEventListener("DOMContentLoaded", function() {
-    const links = document.querySelectorAll('.nav-link');
-    links.forEach(function(link) {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            links.forEach(link => link.classList.remove('active'));
-            link.classList.add('active');
-            const targetUrl = link.getAttribute('href');
-            history.pushState(null, '', targetUrl);
-            fetch(targetUrl)
-                .then(response => response.text())
-                .then(html => {
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
-                    const newContent = doc.querySelector('#content');
-                    if (newContent) {
-                        const contentElement = document.querySelector('#content');
-                        if (contentElement) {
-                            contentElement.innerHTML = newContent.innerHTML;
-                        }
-                    }
+</body>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const links = document.querySelectorAll('.nav-link');
+            links.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    links.forEach(link => link.classList.remove('active'));
+                    link.classList.add('active');
+                    const targetUrl = link.getAttribute('href');
+                    history.pushState(null, '', targetUrl);
+                    fetch(targetUrl)
+                        .then(response => response.text())
+                        .then(html => {
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(html, 'text/html');
+                            const newContent = doc.querySelector('#content');
+                            if (newContent) {
+                                const contentElement = document.querySelector('#content');
+                                if (contentElement) {
+                                    contentElement.innerHTML = newContent.innerHTML;
+                                }
+                            }
 
-                    if (targetUrl === "{% url 'home_content' %}") {
+                            if (targetUrl === "{% url 'home_content' %}") {
+                                history.replaceState(null, '', '/home_content');
+                            }
+                        })
+                        .catch(err => console.error('Failed to fetch page: ', err));
+                });
+
+                if (window.location.pathname === '/') {
+                    const homeLink = document.querySelector('.nav-link[href="{% url 'home_content' %}"]');
+                    if (homeLink) {
+                        homeLink.classList.add('active');
                         history.replaceState(null, '', '/home_content');
                     }
-                })
-                .catch(err => console.error('Failed to fetch page: ', err));
-        });
+                }
+            });
 
-        if (window.location.pathname === '/') {
-            const homeLink = document.querySelector('.nav-link[href="{% url 'home_content' %}"]');
-            if (homeLink) {
-                homeLink.classList.add('active');
-                history.replaceState(null, '', '/home_content');
+            const monthSelect = document.getElementById('month');
+            if (monthSelect) {
+                const monthNames = ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'];
+
+                for (let i = 0; i < monthSelect.options.length; i++) {
+                    const option = monthSelect.options[i];
+                    const monthValue = option.value.split('-')[1];
+                    const yearValue = option.value.split('-')[0];
+                    option.text = `${monthNames[parseInt(monthValue) - 1]} ${yearValue}`;
+                }
             }
-        }
-    });
-
-    const monthSelect = document.getElementById('month');
-    if (monthSelect) {
-        const monthNames = ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'];
-
-        for (let i = 0; i < monthSelect.options.length; i++) {
-            const option = monthSelect.options[i];
-            const monthValue = option.value.split('-')[1];
-            const yearValue = option.value.split('-')[0];
-            option.text = `${monthNames[parseInt(monthValue) - 1]} ${yearValue}`;
-        }
-    }
-});
+        });
+    </script>
+</body>
+</html>

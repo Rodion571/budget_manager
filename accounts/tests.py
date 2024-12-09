@@ -11,7 +11,7 @@ class UserRegistrationTestCase(TestCase):
 
     Methods:
         test_register_user(): Test registering a new user.
-        test_register_user_invalid_date(): Test registering a new user with an invalid date of birth.
+        test_register_user_invalid_data(): Test registering a new user with missing fields.
     """
 
     def test_register_user(self) -> None:
@@ -28,32 +28,31 @@ class UserRegistrationTestCase(TestCase):
             'username': 'newuser',
             'email': 'newuser@example.com',
             'password1': 'complexpassword',
-            'password2': 'complexpassword',
-            'date_of_birth': '1990-01-01'
+            'password2': 'complexpassword'
         })
         self.assertEqual(response.status_code, 302)
         self.assertTrue(User.objects.filter(username='newuser').exists())
 
-    def test_register_user_invalid_date(self) -> None:
+    def test_register_user_invalid_data(self) -> None:
         """
-        Test registering a new user with an invalid date of birth.
+        Test registering a new user with missing fields.
 
-        Sends a POST request to the registration URL with invalid date of birth.
+        Sends a POST request to the registration URL with missing fields.
 
         Asserts:
             The response status code is 200 (no redirect).
             The error message is returned.
         """
         response: HttpResponse = self.client.post(reverse('accounts:register'), {
-            'username': 'newuser',
+            'username': '',
             'email': 'newuser@example.com',
             'password1': 'complexpassword',
-            'password2': 'complexpassword',
-            'date_of_birth': '3000-01-01'  # Invalid date
+            'password2': 'complexpassword'
         })
         self.assertEqual(response.status_code, 200)
+        self.assertIn('form', response.context)
         form = response.context['form']
-        self.assertFormError(form, 'date_of_birth', 'Невірний рік, такої дати немає.')
+        self.assertFormError(form, 'username', "Це поле обов'язкове.")
 
 class UserLoginTestCase(TestCase):
     """
