@@ -5,8 +5,6 @@ from accounts import views as accounts_views
 from expenses import views as expenses_views
 from incomes import views as incomes_views
 from new_app import views as new_app_views
-from translations import views as translations_views
-from django.conf.urls.i18n import set_language
 
 urlpatterns = [
     # URLs для home
@@ -44,10 +42,8 @@ urlpatterns = [
     # URLs для new_app
     path('new_app/', new_app_views.index, name='index'),
 
-    # URLs для translations
-    path('translations/set-language/', translations_views.set_language, name='set_language'),
 
     # Admin URL
     path('admin/', admin.site.urls),
-    path('i18n/setlang/', set_language, name='set_language'),
+
 ]

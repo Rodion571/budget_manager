@@ -19,19 +19,27 @@ def add_income(request: HttpRequest) -> HttpResponse:
         form = IncomeForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('incomes:income_list')
+            return redirect('income_list')
     else:
         form = IncomeForm()
     return render(request, 'incomes/add_income.html', {'form': form})
 
 @login_required
 def income_list(request: HttpRequest) -> HttpResponse:
-    """Render the income list and handle new income creation."""
+    """
+    Render the income list and handle new income creation.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The HTTP response object with the rendered income list page.
+    """
     if request.method == 'POST':
         form = IncomeForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('income_list')
+            return redirect('income_list')  # Обновлено: убрано пространство имен
     else:
         form = IncomeForm()
     incomes = Income.objects.all()

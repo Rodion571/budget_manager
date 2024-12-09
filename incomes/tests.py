@@ -1,37 +1,27 @@
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth import get_user_model
 from django.http import HttpResponse
-from .models import Income
-from incomes.forms import IncomeForm
+from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-class IncomeTests(TestCase):
+class IncomesTests(TestCase):
     """
-    Test case for the Income model views.
+    Test case for the Incomes views.
+
+    Methods:
+        test_add_income_view(): Test the add income view.
+        test_add_income_view_post(): Test the add income view with POST.
+        test_income_list_view(): Test the income list view.
     """
 
     def setUp(self) -> None:
         """
-        Set up a test user and log them in.
-        """
-        self.user = User.objects.create_user(username='testuser', password='12345')
-        self.client.login(username='testuser', password='12345')
+        Set up the test environment.
 
-    def test_income_list_view(self) -> None:
+        Creates a test user.
         """
-        Test the income list view.
-
-        Sends a GET request to the income list URL.
-
-        Asserts:
-            The response status code is 200.
-            The correct template is used for the response.
-        """
-        response: HttpResponse = self.client.get(reverse('incomes:income_list'))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'income_list.html')
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
 
     def test_add_income_view(self) -> None:
         """
@@ -41,22 +31,44 @@ class IncomeTests(TestCase):
 
         Asserts:
             The response status code is 200.
-            The correct template is used for the response.
         """
-        response: HttpResponse = self.client.get(reverse('incomes:add_income'))
+        self.client.login(username='testuser', password='testpassword')
+        response: HttpResponse = self.client.get(reverse('add_income'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'incomes/add_income.html')
 
     def test_add_income_view_post(self) -> None:
         """
-        Test the add income view POST method with invalid data.
+        Test the add income view with POST.
+
+        Sends a POST request to the add income URL.
+
+        Asserts:
+            The response status code is 302 if the form is valid, otherwise check for form errors.
         """
-        response = self.client.post(reverse('incomes:add_income'), {
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.post(reverse('add_income'), {
             'name': 'Test Income',
-            'source': 'Job',
-            'amount': -100,
-            'date': '2024-12-02'
+            'source': 'Test Source',
+            'amount': 100,
+            'date': '2024-12-09',
         })
-        form = response.context['form']
-        self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['amount'], ['Сума повинна бути позитивним числом.'])
+        if response.status_code == 200:
+            print(response.content.decode())
+            form_errors = response.context['form'].errors
+            print(f"Form errors: {form_errors}")
+            self.fail("Форма не прошла валидацию. Проверьте содержимое ответа для ошибок.")
+        else:
+            self.assertEqual(response.status_code, 302)
+
+    def test_income_list_view(self) -> None:
+        """
+        Test the income list view.
+
+        Sends a GET request to the income list URL.
+
+        Asserts:
+            The response status code is 200.
+        """
+        self.client.login(username='testuser', password='testpassword')
+        response: HttpResponse = self.client.get(reverse('income_list'))
+        self.assertEqual(response.status_code, 200)

@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'styles.css' %}" rel="stylesheet">
-    <title>{% trans "Login" %}</title>
+    <title>{% trans "Увійти" %}</title>
     <style>
         body {
             background-color: #f7f7f7;
@@ -39,15 +39,15 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="text-center">{% trans "Login" %}</h1>
+        <h1 class="text-center">{% trans "Увійти" %}</h1>
         <form method="post">
             {% csrf_token %}
             <div class="form-group">
-                <label for="id_username">{% trans "Username" %}</label>
+                <label for="id_username">{% trans "Логін" %}</label>
                 <input type="text" name="username" class="form-control" id="id_username" required>
             </div>
             <div class="form-group">
-                <label for="id_password">{% trans "Password" %}</label>
+                <label for="id_password">{% trans "Пароль" %}</label>
                 <input type="password" name="password" class="form-control" id="id_password" required>
             </div>
             <button type="submit" class="btn btn-primary btn-block">{% trans "Увійти" %}</button>
@@ -70,11 +70,6 @@
         {% endif %}
         <div class="text-center mt-3 auth-link">
             <a href="{% url 'accounts:register' %}" class="btn btn-secondary">{% trans "Ще не маєш акаунту? Реєструйся!" %}</a>
-        </div>
-        <div class="text-center mt-3 auth-link">
-            <a href="{% url 'accounts:set_language' %}?language=en" class="btn btn-link">English</a>
-            <a href="{% url 'accounts:set_language' %}?language=uk" class="btn btn-link">Українська</a>
-            <a href="{% url 'accounts:set_language' %}?language=fr" class="btn btn-link">Français</a>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ request.LANGUAGE_CODE }}">
+<html lang="uk">
 <head>
     {% load static %}
     {% load i18n %}
@@ -83,17 +83,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="text-center mt-3">
-        <form action="{% url 'set_language' %}" method="post">
-            {% csrf_token %}
-            <input name="next" type="hidden" value="{{ request.path }}">
-            <select name="language" onchange="this.form.submit()">
-                <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
-                <option value="uk" {% if LANGUAGE_CODE == 'uk' %}selected{% endif %}>Українська</option>
-                <option value="fr" {% if LANGUAGE_CODE == 'fr' %}selected{% endif %}>Français</option>
-            </select>
-        </form>
     </div>
 </body>
 </html>

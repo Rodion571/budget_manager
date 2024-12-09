@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.contrib.auth import views as auth_views
 from django.contrib.auth import get_user_model
-from django.utils.translation import activate
+
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from .forms import UserRegisterForm, UserLoginForm
 
@@ -58,9 +58,9 @@ def user_login(request: HttpRequest) -> HttpResponse:
                 login(request, user)
                 return redirect('home_content')
             else:
-                form.add_error(None, 'Неверные учетные данные')
+                form.add_error(None, 'Невірні облікові дані')
         else:
-            form.add_error(None, 'Некорректные данные формы')
+            form.add_error(None, 'Некоректні дані форми')
     else:
         form = UserLoginForm()
     return render(request, 'accounts/login.html', {'form': form})
@@ -99,18 +99,30 @@ class CustomLoginView(auth_views.LoginView):
     """
     template_name = 'accounts/login.html'
 
-def set_language(request: HttpRequest) -> HttpResponseRedirect:
-    """
-    Set the user's preferred language.
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        """
+        Handle GET requests for the login view.
 
-    Args:
-        request (HttpRequest): The HTTP request object.
+        Args:
+            request (HttpRequest): The HTTP request object.
+            *args: Additional positional arguments.
+            **kwargs: Additional keyword arguments.
 
-    Returns:
-        HttpResponseRedirect: The HTTP response redirect object.
-    """
-    user_language = request.GET.get('language', 'en')
-    activate(user_language)
-    response = redirect(request.META.get('HTTP_REFERER'))
-    response.set_cookie('django_language', user_language)
-    return response
+        Returns:
+            HttpResponse: The HTTP response object.
+        """
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        """
+        Handle POST requests for the login view.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+            *args: Additional positional arguments.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            HttpResponse: The HTTP response object.
+        """
+        return super().post(request, *args, **kwargs)
